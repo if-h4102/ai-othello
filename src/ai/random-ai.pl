@@ -1,3 +1,8 @@
+% Uncomment to define a module
+
+% :-  module(ModuleName, [ai1/4, canBePlayed/3])
+% :-  use_module(printActors). 
+
 % TODO: import this from another file
 % This function returns coordinates (X, Y) on the given Board where Player can play
 canBePlayed(Board, X, Y, Player) :- true;
