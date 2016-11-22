@@ -1,3 +1,4 @@
+:- module(display, [displayBoard/0]).
 
 board(Board) :- Board = [[_,_,_,_,_,_,_,_,_,_],
                           [_,1,1,1,1,1,1,1,1,_],
@@ -32,7 +33,7 @@ displayRow(IndexRow) :-
     writeln(''),
  	writeln('---------------------------------').
 
-displayBoard:- 
+displayBoard :- 
 	writeln('---------------------------------'),
     displayRow(1),
     displayRow(2),
@@ -41,6 +42,5 @@ displayBoard:-
     displayRow(5),
     displayRow(6),
     displayRow(7),
-    displayRow(8),
-    writeln('').
+    displayRow(8).
     
