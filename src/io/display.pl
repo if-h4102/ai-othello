@@ -1,17 +1,5 @@
 :- module(display, [displayBoard/0]).
 
-board(Board) :- Board = [[_,_,_,_,_,_,_,_,_,_],
-                          [_,1,1,1,1,1,1,1,1,_],
-                          [_,_,_,_,_,_,_,_,_,_],
-                          [_,-1,-1,-1,-1,-1,-1,-1,-1,_],
-                          [_,_,_,_,_,_,_,_,_,_],
-                          [_,_,_,_,_,_,_,_,_,_],
-                          [_,_,_,_,_,_,_,_,_,_],
-                          [_,_,-1,_,_,_,_,-1,_,_],
-                          [_,1,_,_,_,_,_,_,1,_],
-                          [_,_,_,_,_,_,_,_,_,_]].
-
-
 getVal(IndexRow, IndexColumn, Val)  :- board(Board),  nth0(IndexRow, Board, Column), nth0(IndexColumn, Column, Val).
 
 displayCell(Val) :- var(Val), write('   |'), !.
@@ -43,4 +31,3 @@ displayBoard :-
     displayRow(6),
     displayRow(7),
     displayRow(8).
-    
