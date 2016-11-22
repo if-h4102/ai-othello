@@ -1,17 +1,17 @@
 
-board(Board) :- Board = [[_,_,_,_,_,_,_,_,_,_],
-                          [_,1,1,1,1,1,1,1,1,_],
-                          [_,_,_,_,_,_,_,_,_,_],
-                          [_,-1,-1,-1,-1,-1,-1,-1,-1,_],
-                          [_,_,_,_,_,_,_,_,_,_],
-                          [_,_,_,_,_,_,_,_,_,_],
-                          [_,_,_,_,_,_,_,_,_,_],
-                          [_,_,-1,_,_,_,_,-1,_,_],
-                          [_,1,_,_,_,_,_,_,1,_],
-                          [_,_,_,_,_,_,_,_,_,_]].
+board(Board) :- Board =  [[ _, _, _, _, _, _, _, _, _, _],
+                          [ _, 1, 1, 1, 1, 1, 1, 1, 1, _],
+                          [ _, _, _, _, _, _, _, _, _, _],
+                          [ _,-1,-1,-1,-1,-1,-1,-1,-1, _],
+                          [ _, _, _, _, _, _, _, _, _, _],
+                          [ _, _, _, _, _, _, _, _, _, _],
+                          [ _, _, _, _, _, _, _, _, _, _],
+                          [ _, _,-1, _, _, _, _,-1, _, _],
+                          [ _, _, _, _, _, _, _, _, _, _],
+                          [ _, _, _, _, _, _, _, _, _, _]].
 
 
-getVal(IndexRow, IndexColumn, Val)  :- board(Board),  nth0(IndexRow, Board, Column), nth0(IndexColumn, Column, Val).
+getVal(X, Y, Val)  :- board(Board),  nth0(X, Board, Column), nth0(Y, Column, Val).
 
 displayCell(Val) :- var(Val), write('   |'), !.
 displayCell(-1) :- write(' x |'), !.
@@ -19,16 +19,16 @@ displayCell(1) :- write(' o |'), !.
 
 displayCell(IndexRow, IndexColumn) :- getVal(IndexRow, IndexColumn, Val), displayCell(Val).
 
-displayRow(IndexRow) :- 
-    write('|'), 
-    displayCell(IndexRow, 1),
-    displayCell(IndexRow, 2),
-    displayCell(IndexRow, 3),
-    displayCell(IndexRow, 4),
-    displayCell(IndexRow, 5),
-    displayCell(IndexRow, 6),
-    displayCell(IndexRow, 7),
-    displayCell(IndexRow, 8),
+displayRow(Y):- 
+    write('|'),
+    displayCell(1, Y),
+    displayCell(2, Y),
+    displayCell(3, Y),
+    displayCell(4, Y),
+    displayCell(5, Y),
+    displayCell(6, Y),
+    displayCell(7, Y),
+    displayCell(8, Y),
     writeln(''),
  	writeln('---------------------------------').
 
