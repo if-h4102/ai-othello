@@ -1,6 +1,8 @@
-#SWIprolog
+# AI Othello
 
-##Ubuntu
+## SWIprolog
+
+### Ubuntu
 
 	sudo apt-get install swiprolog
 
