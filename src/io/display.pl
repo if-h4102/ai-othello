@@ -3,31 +3,37 @@
 getVal(IndexRow, IndexColumn, Val)  :- board(Board),  nth0(IndexRow, Board, Column), nth0(IndexColumn, Column, Val).
 
 displayCell(Val) :- var(Val), write('   |'), !.
-displayCell(-1) :- write(' x |'), !.
-displayCell(1) :- write(' o |'), !.
+displayCell(-1) :- write(' x |').
+displayCell(1) :- write(' o |').
 
-displayCell(IndexRow, IndexColumn) :- getVal(IndexRow, IndexColumn, Val), displayCell(Val).
+displayCell(X, NewX, Y) :- 
+  getVal(X, Y, Val), 
+  displayCell(Val), 
+  NewX is X + 1.
 
-displayRow(Y):-
-    write('|'),
-    displayCell(1, Y),
-    displayCell(2, Y),
-    displayCell(3, Y),
-    displayCell(4, Y),
-    displayCell(5, Y),
-    displayCell(6, Y),
-    displayCell(7, Y),
-    displayCell(8, Y),
-    writeln(''),
+displayRow(Y, NewY):- 
+  write('|'),
+  displayRow(1, 9, Y),
+  NewY is Y + 1,
+  writeln(''),
  	writeln('---------------------------------').
-
-displayBoard :-
+  
+displayRow(X, EndX, Y) :-
+  X is EndX.
+  
+displayRow(X, EndX, Y) :-
+  displayCell(X, NewX, Y),
+  displayRow(NewX, EndX, Y).
+  
+displayBoard :- 
 	writeln('---------------------------------'),
-    displayRow(1),
-    displayRow(2),
-    displayRow(3),
-    displayRow(4),
-    displayRow(5),
-    displayRow(6),
-    displayRow(7),
-    displayRow(8).
+  displayBoard(1, 9).
+ 
+displayBoard(Y, EndY) :- 
+  Y is EndY, 
+  !.
+  
+displayBoard(Y, EndY) :- 
+  displayRow(Y, NewY),
+  displayBoard(NewY, EndY), 
+  !.
