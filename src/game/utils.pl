@@ -45,3 +45,37 @@ nextBoard(OldBoard, NewBoard, X, Y) :-
   getVal(X, Y, NewBoard, OldVar),
   nextCase(X, Y, NewX, NewY),
   nextBoard(OldBoard, NewBoard, NewX, NewY).
+  
+  
+updateBoardDirection(_, _, _, _, _, _, 0).
+
+updateBoardDirection(_, _, _, _, _, _, SwappedCaseNumber) :- SwappedCaseNumber < 0.
+    
+updateBoardDirection(NewBoard, Player, X, Y, DeltaX, DeltaY, SwappedCaseNumber) :- 
+    NewX is X + DeltaX,
+    NewY is Y + DeltaY,
+    getCase(NewBoard,NewX,NewY,Player),
+    NewSwappedCaseNumber is SwappedCaseNumber - 1,
+	updateBoardDirection(NewBoard, Player, X, Y, DeltaX, DeltaY, NewSwappedCaseNumber).
+
+updateBoard(Board, Player, X, Y, NewBoard) :- 
+    NewBoard = [[_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ],
+                [_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ],
+                [_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ],
+                [_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ],
+                [_ ,_ ,_ ,_ , _, _,_ ,_ ,_ ,_ ],
+                [_ ,_ ,_ ,_ , _, _,_ ,_ ,_ ,_ ],
+                [_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ],
+                [_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ],
+                [_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ],
+                [_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ]],
+    getCase(NewBoard, X, Y, Player),
+    swappedCaseDirection(Board, X, Y,-1,-1, Player, SwappedCase1), updateBoardDirection(NewBoard, Player, X, Y,-1,-1, SwappedCase1),
+    swappedCaseDirection(Board, X, Y,-1, 0, Player, SwappedCase2), updateBoardDirection(NewBoard, Player, X, Y,-1, 0, SwappedCase2),
+    swappedCaseDirection(Board, X, Y,-1, 1, Player, SwappedCase3), updateBoardDirection(NewBoard, Player, X, Y,-1, 1, SwappedCase3),
+    swappedCaseDirection(Board, X, Y, 0,-1, Player, SwappedCase4), updateBoardDirection(NewBoard, Player, X, Y, 0,-1, SwappedCase4),
+    swappedCaseDirection(Board, X, Y, 0, 1, Player, SwappedCase5), updateBoardDirection(NewBoard, Player, X, Y, 0, 1, SwappedCase5),
+    swappedCaseDirection(Board, X, Y, 1,-1, Player, SwappedCase6), updateBoardDirection(NewBoard, Player, X, Y, 1,-1, SwappedCase6),
+    swappedCaseDirection(Board, X, Y, 1, 0, Player, SwappedCase7), updateBoardDirection(NewBoard, Player, X, Y, 1, 0, SwappedCase7),
+    swappedCaseDirection(Board, X, Y, 1, 1, Player, SwappedCase8), updateBoardDirection(NewBoard, Player, X, Y, 1, 1, SwappedCase8),
+	nextBoard(Board, NewBoard).
