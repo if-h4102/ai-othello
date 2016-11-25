@@ -1,3 +1,5 @@
+:- module(game, [winner/2]).
+
 testBoard(Board) :-  Board = [[_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ],
                               [_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ],
                               [_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ],
@@ -20,7 +22,42 @@ isGameNotFinished(Board, Player) :- Player2 is -Player, playerCanPlay(Board, Pla
 % prolog won't backtrack and see the next line => return false.
 % Otherwise, go to the next line
 gameOver(Board, Player) :- isGameNotFinished(Board, Player), !, fail.
-gameOver(Board, Player) :- true.
+gameOver(_, _) :- true.
+
+% Get the current score
+% NOTE: there must be only one way to prove the score
+% Therefore, there is a cut after each statement,
+% to avoid exploring useless branches
+getScoreBoard(Board, Score) :-
+    getScoreBoard(Board, Score, 1, 1).
+getScoreBoard(_, Score, 8, 9) :-
+    Score is 0,
+    !.
+% If we try to go too far on Y increment X
+getScoreBoard(Board, Score, LastX, 9) :-
+    X is LastX+1,
+    getScoreBoard(Board,Score,X,1),
+    !.
+% If the case is unset, score don't change
+getScoreBoard(Board, Score, LastX, LastY) :-
+    getCase(Board, LastX, LastY, Case),
+    var(Case),
+    Y is LastY+1,
+    getScoreBoard(Board, Score, LastX, Y),
+    !.
+% Else add the case value to the current score
+getScoreBoard(Board, Score, LastX, LastY) :-
+    getCase(Board, LastX, LastY, Case),
+    Y is LastY+1,
+    getScoreBoard(Board, OldScore, LastX, Y),
+    Score is OldScore+Case,
+    !.
+
+% Get the current winner of the game
+winner(Board, 1) :- getScoreBoard(Board, Score), Score > 0.
+winner(Board, -1) :- getScoreBoard(Board, Score), Score < 0.
+winner(_, Player) :- Player is 0.
+
 
 % Check if a player can play on the board
 playerCanPlay(Board,Player) :- playerCanPlayOnLine(Board,Player,1).
