@@ -1,26 +1,14 @@
 :- module(display, [displayBoard/0]).
 
 getVal(IndexRow, IndexColumn, Val)  :- board(Board),  nth0(IndexRow, Board, Column), nth0(IndexColumn, Column, Val).
-board(Board) :- Board =  [[ _, _, _, _, _, _, _, _, _, _],
-                          [ _, 1, 1, 1, 1, 1, 1, 1, 1, _],
-                          [ _, _, _, _, _, _, _, _, _, _],
-                          [ _,-1,-1,-1,-1,-1,-1,-1,-1, _],
-                          [ _, _, _, _, _, _, _, _, _, _],
-                          [ _, _, _, _, _, _, _, _, _, _],
-                          [ _, _, _, _, _, _, _, _, _, _],
-                          [ _, _,-1, _, _, _, _,-1, _, _],
-                          [ _, _, _, _, _, _, _, _, _, _],
-                          [ _, _, _, _, _, _, _, _, _, _]].
 
-
-getVal(X, Y, Val)  :- board(Board),  nth0(X, Board, Column), nth0(Y, Column, Val).
 displayCell(Val) :- var(Val), write('   |'), !.
 displayCell(-1) :- write(' x |'), !.
 displayCell(1) :- write(' o |'), !.
 
 displayCell(IndexRow, IndexColumn) :- getVal(IndexRow, IndexColumn, Val), displayCell(Val).
 
-displayRow(Y):- 
+displayRow(Y):-
     write('|'),
     displayCell(1, Y),
     displayCell(2, Y),
@@ -33,7 +21,7 @@ displayRow(Y):-
     writeln(''),
  	writeln('---------------------------------').
 
-displayBoard :- 
+displayBoard :-
 	writeln('---------------------------------'),
     displayRow(1),
     displayRow(2),
