@@ -28,7 +28,7 @@ playerCanPlayOnLine(Board,Player,X) :- NewX is X+1, NewX<9, playerCanPlayOnLine(
 canBePlayed(Board,X,Y,Player) :- isOnBoard(X,Y), getCase(Board,X,Y,Case), isCaseEmpty(Case), isSwappingCase(Board,X,Y,Player).
 
 %%utility methods
-isOnBoard(X,Y) :- X>0,X<9,Y>0,Y<9.
+isOnBoard(X,Y) :- between(1,8,X),between(1,8,Y).
 getCase(Board,X,Y,Case) :- isOnBoard(X,Y), nth0(X, Board, Column), nth0(Y, Column, Case).
 isCaseEmpty(Case) :- var(Case).
 % isCaseEmpty(Case) :- Case == 0.
