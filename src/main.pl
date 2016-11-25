@@ -4,8 +4,9 @@
 :- dynamic board/1.		% "dynamic" means that predicate's definition may change during run time
 
 % Initialize the board
-:- assert(board([		% "assert" put the board in the knowledges base.
-	[_, _, _, _, _, _, _, _, _, _],
+% "assert" put the board in the knowledges base.
+:- assert(board([
+    [_, _, _, _, _, _, _, _, _, _],
     [_, _, _, _, _, _, _, _, _, _],
     [_, _, _, _, _, _, _, _, _, _],
     [_, _, _, _, _, _, _, _, _, _],
@@ -14,7 +15,7 @@
     [_, _, _, _, _, _, _, _, _, _],
     [_, _, _, _, _, _, _, _, _, _],
     [_, _, _, _, _, _, _, _, _, _],
-    [_, _, _, _, _, _, _, _, _, _],
+    [_, _, _, _, _, _, _, _, _, _]
 ])).
 
 run :- writeln('Running...'),
