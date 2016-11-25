@@ -1,39 +1,38 @@
-:- module(display, [displayBoard/0]).
-
-getVal(IndexRow, IndexColumn, Val)  :- board(Board),  nth0(IndexRow, Board, Column), nth0(IndexColumn, Column, Val).
+:- module(display, [displayBoard/1]).
+:- use_module('../game/utils', []).
 
 displayCell(Val) :- var(Val), write('   |'), !.
 displayCell(-1) :- write(' x |').
 displayCell(1) :- write(' o |').
 
-displayCell(X, NewX, Y) :- 
-  getVal(X, Y, Val), 
+displayCell(Board, X, NewX, Y) :-
+  utils:getVal(Board, X, Y, Val), 
   displayCell(Val), 
   NewX is X + 1.
 
-displayRow(Y, NewY):- 
+displayRow(Board, Y, NewY):- 
   write('|'),
-  displayRow(1, 9, Y),
+  displayRow(Board, 1, 9, Y),
   NewY is Y + 1,
   writeln(''),
  	writeln('---------------------------------').
   
-displayRow(X, EndX, Y) :-
+displayRow(_, X, EndX, Y) :-
   X is EndX.
   
-displayRow(X, EndX, Y) :-
-  displayCell(X, NewX, Y),
-  displayRow(NewX, EndX, Y).
+displayRow(Board, X, EndX, Y) :-
+  displayCell(Board, X, NewX, Y),
+  displayRow(Board, NewX, EndX, Y).
   
-displayBoard :- 
+displayBoard(Board) :- 
 	writeln('---------------------------------'),
-  displayBoard(1, 9).
+  displayBoard(Board, 1, 9).
  
-displayBoard(Y, EndY) :- 
+displayBoard(_, Y, EndY) :- 
   Y is EndY, 
   !.
   
-displayBoard(Y, EndY) :- 
-  displayRow(Y, NewY),
-  displayBoard(NewY, EndY), 
+displayBoard(Board, Y, EndY) :- 
+  displayRow(Board, Y, NewY),
+  displayBoard(Board, NewY, EndY), 
   !.

@@ -1,3 +1,5 @@
+:- module(random-ai, []).
+
 % Uncomment to define a module
 
 % :-  module(ModuleName, [ai1/4, canBePlayed/3])

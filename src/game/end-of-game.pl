@@ -1,17 +1,5 @@
-:- module(game, [winner/2]).
-
-testBoard(Board) :-  Board = [[_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ],
-                              [_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ],
-                              [_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ],
-                              [_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ],
-                              [_ ,_ ,_ ,_ , 1,-1,_ ,_ ,_ ,_ ],
-                              [_ ,_ ,_ ,_ ,-1, 1,_ ,_ ,_ ,_ ],
-                              [_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ],
-                              [_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ],
-                              [_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ],
-                              [_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ]].
-
-test(Board) :- testBoard(Board), isGameNotFinished(Board, 1).
+:- module(game, []).
+:- use_module(utils, []).
 
 % Return true is the current player can play, otherwise check if the next player can play
 isGameNotFinished(Board, Player) :- playerCanPlay(Board, Player).
@@ -40,14 +28,14 @@ getScoreBoard(Board, Score, LastX, 9) :-
     !.
 % If the case is unset, score don't change
 getScoreBoard(Board, Score, LastX, LastY) :-
-    getCase(Board, LastX, LastY, Case),
+    utils:getVal(Board, LastX, LastY, Case),
     var(Case),
     Y is LastY+1,
     getScoreBoard(Board, Score, LastX, Y),
     !.
 % Else add the case value to the current score
 getScoreBoard(Board, Score, LastX, LastY) :-
-    getCase(Board, LastX, LastY, Case),
+    utils:getVal(Board, LastX, LastY, Case),
     Y is LastY+1,
     getScoreBoard(Board, OldScore, LastX, Y),
     Score is OldScore+Case,
@@ -70,13 +58,7 @@ playerCanPlayOnLine(Board,Player,X) :- NewX is X+1, NewX<9, playerCanPlayOnLine(
 
 
 % Check if a player can play on a given case
-canBePlayed(Board,X,Y,Player) :- isOnBoard(X,Y), getCase(Board,X,Y,Case), isCaseEmpty(Case), isSwappingCase(Board,X,Y,Player).
-
-% Utility methods
-isOnBoard(X,Y) :- X>0,X<9,Y>0,Y<9.
-getCase(Board,X,Y,Case) :- isOnBoard(X,Y), nth0(X, Board, Column), nth0(Y, Column, Case).
-isCaseEmpty(Case) :- var(Case).
-% isCaseEmpty(Case) :- Case == 0.
+canBePlayed(Board,X,Y,Player) :- isOnBoard(X,Y), isCaseEmpty(X, Y), isSwappingCase(Board,X,Y,Player).
 
 % SwappedCase is positive if case are swapped and negative or zero else.
 % if the number is positive it's the number of swapped case in the given direction.
@@ -84,24 +66,23 @@ isCaseEmpty(Case) :- var(Case).
 swappedCaseDirection(Board,Xinit,Yinit,DeltaX,DeltaY,Player,SwappedCase) :-
     X is Xinit+DeltaX,
     Y is Yinit+DeltaY,
-    getCase(Board,X,Y,Case),
+    getVal(Board, X,Y,Case),
     Case == Player,
     SwappedCase is 0,
     !.
 
 % If this doesn't swapp anything return -10
-swappedCaseDirection(Board,Xinit,Yinit,DeltaX,DeltaY,_ ,SwappedCase) :-
+swappedCaseDirection(Board, Xinit,Yinit,DeltaX,DeltaY,_ ,SwappedCase) :-
     X is Xinit+DeltaX,
     Y is Yinit+DeltaY,
-    getCase(Board,X,Y,Case),
-    isCaseEmpty(Case),
+    isCaseEmpty(Board, X, Y),
     SwappedCase is -10,
     !.
 
 swappedCaseDirection(Board,Xinit,Yinit,DeltaX,DeltaY,Player,SwappedCase) :-
     X is Xinit+DeltaX,
     Y is Yinit+DeltaY,
-    isOnBoard(X,Y),
+    isOnBoard(Board, X, Y),
     swappedCaseDirection(Board,X,Y,DeltaX,DeltaY,Player,NewSwappedCase),
     SwappedCase is NewSwappedCase + 1.
 
