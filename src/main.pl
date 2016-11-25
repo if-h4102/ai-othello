@@ -18,7 +18,8 @@
     [_, _, _, _, _, _, _, _, _, _]
 ])).
 
-run :- writeln('Running...'),
+run :- 
+  writeln('Running...'),
 	display:displayBoard,
 	writeln('End!').
 

@@ -1,13 +1,12 @@
 :- module(display, [displayBoard/0]).
-
-getVal(IndexRow, IndexColumn, Val)  :- board(Board),  nth0(IndexRow, Board, Column), nth0(IndexColumn, Column, Val).
+:- use_module(game/utils, []).
 
 displayCell(Val) :- var(Val), write('   |'), !.
 displayCell(-1) :- write(' x |').
 displayCell(1) :- write(' o |').
 
-displayCell(X, NewX, Y) :- 
-  getVal(X, Y, Val), 
+displayCell(X, NewX, Y) :-
+  utils:getVal(X, Y, Val), 
   displayCell(Val), 
   NewX is X + 1.
 
