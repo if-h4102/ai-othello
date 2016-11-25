@@ -1,4 +1,4 @@
-:- module(utils, [getVal/3]).
+:- module(utils, [getVal/3, invertVal/2, isCaseEmpty/2, isOnBoard/2]).
 
 getVal(X, Y, Val)  :- 
   board(Board),  
