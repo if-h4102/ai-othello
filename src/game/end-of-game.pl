@@ -1,3 +1,5 @@
+:- module(end-of-game,[isGameNotFinished/2,canBePlayed/4,isOnBoard/2,getCase/4,isCaseEmpty/2])
+
 testBoard(Board) :-  Board = [[_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ],
                               [_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ],
                               [_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ],
