@@ -1,10 +1,9 @@
-:- module(utils).
-
+:- module(utils, [getVal/3]).
 
 getVal(X, Y, Val)  :- 
   board(Board),  
-  nth0(Y, Board, Column), 
-  nth0(X, Column, Val).
+  nth0(X, Board, Column), 
+  nth0(Y, Column, Val).
 
 % if case (X, Y) is empty, return false and stop
 invertVal(X, Y) :-
@@ -21,3 +20,5 @@ invertVal(X, Y) :-
 isCaseEmpty(X, Y) :-
   getVal(X, Y, Val),
   var(Val).
+
+isOnBoard(X,Y) :- X > 0, X < 9, Y > 0, Y < 9.

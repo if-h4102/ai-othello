@@ -1,15 +1,4 @@
-testBoard(Board) :-  Board = [[_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ],
-                              [_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ],
-                              [_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ],
-                              [_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ],
-                              [_ ,_ ,_ ,_ , 1,-1,_ ,_ ,_ ,_ ],
-                              [_ ,_ ,_ ,_ ,-1, 1,_ ,_ ,_ ,_ ],
-                              [_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ],
-                              [_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ],
-                              [_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ],
-                              [_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ]].
-
-test(Board) :- testBoard(Board), isGameNotFinished(Board, 1).
+:- use_module(game/utils, []).
 
 % Return true is the current player can play, otherwise check if the next player can play
 isGameNotFinished(Board, Player) :- playerCanPlay(Board, Player).
@@ -33,13 +22,7 @@ playerCanPlayOnLine(Board,Player,X) :- NewX is X+1, NewX<9, playerCanPlayOnLine(
 
 
 % Check if a player can play on a given case
-canBePlayed(Board,X,Y,Player) :- isOnBoard(X,Y), getCase(Board,X,Y,Case), isCaseEmpty(Case), isSwappingCase(Board,X,Y,Player).
-
-% Utility methods
-isOnBoard(X,Y) :- X>0,X<9,Y>0,Y<9.
-getCase(Board,X,Y,Case) :- isOnBoard(X,Y), nth0(X, Board, Column), nth0(Y, Column, Case).
-isCaseEmpty(Case) :- var(Case).
-% isCaseEmpty(Case) :- Case == 0.
+canBePlayed(Board,X,Y,Player) :- isOnBoard(X,Y), isCaseEmpty(X, Y), isSwappingCase(Board,X,Y,Player).
 
 % SwappedCase is positive if case are swapped and negative or zero else.
 % if the number is positive it's the number of swapped case in the given direction.
@@ -47,7 +30,7 @@ isCaseEmpty(Case) :- var(Case).
 swappedCaseDirection(Board,Xinit,Yinit,DeltaX,DeltaY,Player,SwappedCase) :-
     X is Xinit+DeltaX,
     Y is Yinit+DeltaY,
-    getCase(Board,X,Y,Case),
+    getVal(X,Y,Case),
     Case == Player,
     SwappedCase is 0,
     !.
@@ -56,15 +39,14 @@ swappedCaseDirection(Board,Xinit,Yinit,DeltaX,DeltaY,Player,SwappedCase) :-
 swappedCaseDirection(Board,Xinit,Yinit,DeltaX,DeltaY,_ ,SwappedCase) :-
     X is Xinit+DeltaX,
     Y is Yinit+DeltaY,
-    getCase(Board,X,Y,Case),
-    isCaseEmpty(Case),
+    isCaseEmpty(X, Y),
     SwappedCase is -10,
     !.
 
 swappedCaseDirection(Board,Xinit,Yinit,DeltaX,DeltaY,Player,SwappedCase) :-
     X is Xinit+DeltaX,
     Y is Yinit+DeltaY,
-    isOnBoard(X,Y),
+    isOnBoard(X, Y),
     swappedCaseDirection(Board,X,Y,DeltaX,DeltaY,Player,NewSwappedCase),
     SwappedCase is NewSwappedCase + 1.
 

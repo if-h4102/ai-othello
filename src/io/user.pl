@@ -1,6 +1,5 @@
 :- module(user, [readIntInput/2]).
 
-
 readIntInput(X) :-
     repeat, write(' Please enter an integer '), read(X), integer(X), !.
 
