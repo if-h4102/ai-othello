@@ -1,6 +1,7 @@
 :- use_module(library(http/thread_httpd)).
 :- use_module(library(http/http_dispatch)).
 :- use_module(library(http/http_parameters)).
+:- use_module(library(http/http_json)).
 
 % Add a basic route
 :- http_handler(/, welcome, []).
@@ -20,7 +21,6 @@ server(Port) :- http_server(http_dispatch, [port(Port)]).
 square(X, Res) :- Res is X * X .
 api_square(Request) :-
     http_parameters(Request, [number(Number, [number])]),
-    format('Content-type: text/plain~n~n'),
     square(Number, Res),
-    format(Res).
+    reply_json(json([number=Number, square=Res])).
 :- http_handler('/square', api_square, []).
