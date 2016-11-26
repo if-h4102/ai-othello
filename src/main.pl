@@ -21,8 +21,8 @@
 
 run :- 
   writeln('Running...'),
-    board(Board),
-	display:displayBoard(Bord),
+  board(Board),
+	display:displayBoard(Board),
 	writeln('End!').
 
 :- run, halt.
