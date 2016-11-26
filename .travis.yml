@@ -9,3 +9,6 @@ before_script:
 
 script:
     - swipl test/main.pl
+    
+notifications:
+  slack: ifhexas1:zs56o8LumGUDJMX1iWdQJwRO
