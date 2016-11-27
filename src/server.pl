@@ -4,7 +4,8 @@
 :- use_module(library(http/http_json)).
 :- use_module(library(http/json_convert)).
 
-% This predicate allows us to launch the server on the port given as parameter
+%%%%%% Create predicate to launch the server on the given port (on localhost)
+
 server(Port) :- http_server(http_dispatch, [port(Port)]).
 
 %%%%%% Define API endpoints
@@ -137,8 +138,8 @@ api_play_validate(Request) :-
     Playable = false,
     reply_json_dict(json([error=Result, move=json([x=X, y=Y]), board=Board, playable=Playable])).
     
-
-
+    
+%%%%%% Launch the server on port 8000
 
 :- server(8000).
     
