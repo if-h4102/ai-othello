@@ -3,6 +3,9 @@
 :- use_module(library(http/http_parameters)).
 :- use_module(library(http/http_json)).
 :- use_module(library(http/json_convert)).
+:- use_module(library(http/http_cors)).
+
+:- set_setting(http:cors, [*]).
 
 %%%%%% Create predicate to launch the server on the given port (on localhost)
 
@@ -93,6 +96,7 @@ initialBoard([
 api_board_initial(_) :-
     initialBoard(Board),
     prolog_to_json(Board, JsonBoard),
+    cors_enable,
     reply_json_dict(JsonBoard).
     
 % /api/board/update
@@ -108,6 +112,7 @@ api_board_update(Request) :-
     json_to_prolog(JsonBoard, Board),
     % TODO: import method that generates the next board
     NextBoard = 'This API endpoint is not yet implemented',
+    cors_enable,
     reply_json_dict(json([error=NextBoard])).
     
 % /api/play
@@ -121,6 +126,7 @@ api_play(Request) :-
     json_to_prolog(JsonBoard, Board),
     % TODO: import method that plays and generates the next board
     NextBoard = "This API endpoint is not yet implemented",
+    cors_enable,
     reply_json_dict(json([error=NextBoard])).
     
 % /api/play/validate
@@ -136,6 +142,7 @@ api_play_validate(Request) :-
     % TODO: import method which validates or not the move
     Result = "This API endpoint is not yet implemented",
     Playable = false,
+    cors_enable,
     reply_json_dict(json([error=Result, move=json([x=X, y=Y]), board=Board, playable=Playable])).
     
     
