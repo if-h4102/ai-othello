@@ -24,3 +24,36 @@ api_square(Request) :-
     square(Number, Res),
     reply_json(json([number=Number, square=Res])).
 :- http_handler('/square', api_square, []).
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+% And now, let's try to translate JSON to Prolog and vice versa
+% First build a handler able to echo a json file
+api_json_echo(Request) :-
+    http_read_json_dict(Request, JsonIn),
+    reply_json_dict(JsonIn).
+:- http_handler('/json/echo', api_json_echo, []).
+
+:- server(8000).
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
