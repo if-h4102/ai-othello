@@ -20,7 +20,8 @@ server(Port) :- http_server(http_dispatch, [port(Port)]).
 :- http_handler('/api/board/initial', api_board_initial, []).
 
 % Send the updated board after the given move is played
-% Requirements: the given move must be a valid one (see /api/play/validate)
+% Requirements: - the given move must be a valid one (see /api/play/validate)
+%               - the given board must be a valid one (10*10 containing 0, -1 or 1 only)
 % URL Parameters:
 %   - player: the player playing the given move
 %         - -1: white tokens player
@@ -35,7 +36,7 @@ server(Port) :- http_server(http_dispatch, [port(Port)]).
 :- http_handler('/api/board/update', api_board_update, []).
 
 % Play one move as the given AI, and send back the updated board
-% Requirements: the board must be a valid one (10*10 containing 0, -1 or 1 only)
+% Requirements: the given board must be a valid one (10*10 containing 0, -1 or 1 only)
 % URL Parameters:
 %   - ai: the AI according to which the move will be played
 %         - 0: totally random AI
@@ -53,7 +54,7 @@ server(Port) :- http_server(http_dispatch, [port(Port)]).
 :- http_handler('/api/play', api_play, []).
 
 % Return true if the given move can be played, or false otherwise (in a JSON file)
-% Requirements: the board must be a valid one (10*10 containing 0, -1 or 1 only)
+% Requirements: the given board must be a valid one (10*10 containing 0, -1 or 1 only)
 % URL Parameters:
 %   - player: the player which the AI will play for
 %         - -1: white tokens player
@@ -71,6 +72,71 @@ server(Port) :- http_server(http_dispatch, [port(Port)]).
 %   playable: true | false
 % }
 :- http_handler('/api/play/validate', api_play_validate, []).
+
+
+%%%%%% Define API calls' handlers
+
+% /api/board/initial
+initialBoard([
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0,-1, 1, 0, 0, 0, 0],
+    [0, 0, 0, 0, 1,-1, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+]).
+api_board_initial(_) :-
+    initialBoard(Board),
+    prolog_to_json(Board, JsonBoard),
+    reply_json_dict(JsonBoard).
+    
+% /api/board/update
+% Requirements: - the given move must be a valid one (see /api/play/validate)
+%               - the given board must be a valid one (10*10 containing 0, -1 or 1 only)
+api_board_update(Request) :-
+    http_parameters(Request, [
+      player(Player, [integer, oneof([-1, 1])]),
+      movex(X, [integer, between(1, 8)]),
+      movey(Y, [integer, between(1, 8)])
+    ]),
+    http_read_json_dict(Request, JsonBoard),
+    json_to_prolog(JsonBoard, Board),
+    % TODO: import method that generates the next board
+    NextBoard = 'This API endpoint is not yet implemented',
+    reply_json_dict(json([error=NextBoard])).
+    
+% /api/play
+% Requirements: the given board must be a valid one (10*10 containing 0, -1 or 1 only)
+api_play(Request) :-
+    http_parameters(Request, [
+      player(Player, [integer, oneof([-1, 1])]),
+      ai(Ai, [integer, between(0, 3)])
+    ]),
+    http_read_json_dict(Request, JsonBoard),
+    json_to_prolog(JsonBoard, Board),
+    % TODO: import method that plays and generates the next board
+    NextBoard = "This API endpoint is not yet implemented",
+    reply_json_dict(json([error=NextBoard])).
+    
+% /api/play/validate
+% Requirements: the given board must be a valid one (10*10 containing 0, -1 or 1 only)
+api_play_validate(Request) :-
+    http_parameters(Request, [
+      player(Player, [integer, oneof([-1, 1])]),
+      movex(X, [integer, between(1, 8)]),
+      movey(Y, [integer, between(1, 8)])
+    ]),
+    http_read_json_dict(Request, JsonBoard),
+    json_to_prolog(JsonBoard, Board),
+    % TODO: import method which validates or not the move
+    Result = "This API endpoint is not yet implemented",
+    Playable = false,
+    reply_json_dict(json([error=Result, move=json([x=X, y=Y]), board=Board, playable=Playable])).
+    
 
 %%%%%%%%%%%%%%%%%%%%%%%%
 % The basics !
