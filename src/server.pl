@@ -2,6 +2,7 @@
 :- use_module(library(http/http_dispatch)).
 :- use_module(library(http/http_parameters)).
 :- use_module(library(http/http_json)).
+:- use_module(library(http/json_convert)).
 
 % Add a basic route
 :- http_handler(/, welcome, []).
@@ -30,8 +31,31 @@ api_square(Request) :-
 % First build a handler able to echo a json file
 api_json_echo(Request) :-
     http_read_json_dict(Request, JsonIn),
+    json_to_prolog(JsonIn, Object),
+    format(user_output, "~p~n", [Object]),
     reply_json_dict(JsonIn).
 :- http_handler('/json/echo', api_json_echo, []).
+% Example with:
+% curl -H "Content-Type: application/json" -X POST -d '{"Board":[{"id":0, "row":[{"id":0, "value":0}, {"id":1, "value":-1}]}]}' http://localhost:8000/json/echo
+
+% And now, let's build an API endpoint which send a board as a json!
+:- assert(board([
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0,-1, 1, 0, 0, 0, 0],
+    [0, 0, 0, 0, 1,-1, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+])).
+api_json_board(_) :-
+    board(Board),
+    prolog_to_json(Board, JsonBoard),
+    reply_json_dict(JsonBoard).
+:- http_handler('/json/board', api_json_board, []).
 
 :- server(8000).
     
