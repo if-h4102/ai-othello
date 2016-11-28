@@ -1,3 +1,4 @@
+% Modules needed for the server
 :- use_module(library(http/thread_httpd)).
 :- use_module(library(http/http_dispatch)).
 :- use_module(library(http/http_parameters)).
@@ -5,6 +6,12 @@
 :- use_module(library(http/json_convert)).
 :- use_module(library(http/http_cors)).
 
+% Modules needed for the API
+:- use_module('game/end-of-game', []).
+:- use_module('game/utils', []).
+% :- use_module('ai/ai', []).
+
+% Enable cross origin requests
 :- set_setting(http:cors, [*]).
 
 %%%%%% Create predicate to launch the server on the given port (on localhost)
@@ -110,9 +117,13 @@ api_board_update(Request) :-
     ]),
     http_read_json_dict(Request, JsonBoard),
     json_to_prolog(JsonBoard, Board),
-    % TODO: import method that generates the next board
+    % TODO:
+    % - utils:updateBoard(Board, Player, X, Y, NextBoard),
+    % - make it work with 0s instead of _
+    % - prolog_to_json(NextBoard, JsonBoard),
     NextBoard = 'This API endpoint is not yet implemented',
     cors_enable,
+    % - reply_json_dict(JsonBoard).
     reply_json_dict(json([error=NextBoard])).
     
 % /api/play
@@ -124,9 +135,14 @@ api_play(Request) :-
     ]),
     http_read_json_dict(Request, JsonBoard),
     json_to_prolog(JsonBoard, Board),
-    % TODO: import method that plays and generates the next board
+    % TODO:
+    % - ai:bestMove(Board, Ai, X, Y, Player),
+    % - !,  % To prevent the case where several best moves are possible from happening
+    % - utils:updateBoard(Board, Player, X, Y, NextBoard),
+    % - prolog_to_json(NextBoard, JsonBoard),
     NextBoard = "This API endpoint is not yet implemented",
     cors_enable,
+    % - reply_json_dict(JsonBoard).
     reply_json_dict(json([error=NextBoard])).
     
 % /api/play/validate
@@ -139,12 +155,25 @@ api_play_validate(Request) :-
     ]),
     http_read_json_dict(Request, JsonBoard),
     json_to_prolog(JsonBoard, Board),
-    % TODO: import method which validates or not the move
+    % TODO:
+    % - game:canBePlayed(Board, X, Y, Player),
+    % - Playable = true,
     Result = "This API endpoint is not yet implemented",
     Playable = false,
     cors_enable,
     reply_json_dict(json([error=Result, move=json([x=X, y=Y]), board=Board, playable=Playable])).
-    
+% In case the move can't be played
+/* api_play_validate(Request) :-
+    http_parameters(Request, [
+      player(Player, [integer, oneof([-1, 1])]),
+      movex(X, [integer, between(1, 8)]),
+      movey(Y, [integer, between(1, 8)])
+    ]),
+    http_read_json_dict(Request, JsonBoard),
+    json_to_prolog(JsonBoard, Board),
+    Playable = false,
+    cors_enable,
+    reply_json_dict(json([move=json([x=X, y=Y]), board=Board, playable=Playable])). */
     
 %%%%%% Launch the server on port 8000
 
