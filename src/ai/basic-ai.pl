@@ -1,4 +1,5 @@
-:- use_module(../game/end-of-game, []).
+:- module('basic_ai', []).
+:- use_module('../game/end-of-game', []).
 
 scoreCoefBoard(ScoreBoard) :-  Board = [[1000 ,-30 ,10 ,10 ,10 ,10 ,10 , 10 ,-30 ,1000 ],
                                         [-30 ,-50 ,-5 ,-5 ,-5 ,-5 ,-5 ,-5 ,-50 ,-30 ],
