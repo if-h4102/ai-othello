@@ -1,19 +1,5 @@
-<<<<<<< HEAD
-:- module(end-of-game,[isGameNotFinished/2,canBePlayed/4,isOnBoard/2,getCase/4,isCaseEmpty/2])
-
-testBoard(Board) :-  Board = [[_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ],
-                              [_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ],
-                              [_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ],
-                              [_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ],
-                              [_ ,_ ,_ ,_ , 1,-1,_ ,_ ,_ ,_ ],
-                              [_ ,_ ,_ ,_ ,-1, 1,_ ,_ ,_ ,_ ],
-                              [_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ],
-                              [_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ],
-                              [_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ],
-                              [_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ]].
-=======
 :- use_module(game/utils, []).
->>>>>>> 9274a9b47e4d9bc05de270fbca997dad0c7cb02d
+
 
 % Return true is the current player can play, otherwise check if the next player can play
 isGameNotFinished(Board, Player) :- playerCanPlay(Board, Player).
