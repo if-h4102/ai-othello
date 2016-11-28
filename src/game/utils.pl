@@ -10,7 +10,8 @@ isCaseEmpty(Board, X, Y) :-
   var(Val).
 
 isOnBoard(X, Y) :- 
-  X > 0, X < 9, Y > 0, Y < 9.
+  between(1, 8, X),
+  between(1, 8, Y).
   
 nextCase(X, Y, _, _) :-
   isOnBoard(X, Y),
