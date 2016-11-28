@@ -9,7 +9,7 @@
 % Modules needed for the API
 :- use_module('game/end-of-game', []).
 :- use_module('game/utils', []).
-% :- use_module('ai/ai', []).
+:- use_module('ai/ai', []).
 
 % Enable cross origin requests
 :- set_setting(http:cors, [*]).
