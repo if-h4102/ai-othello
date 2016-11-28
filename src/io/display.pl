@@ -17,7 +17,7 @@ displayRow(Board, Y, NewY):-
   writeln(''),
  	writeln('---------------------------------').
   
-displayRow(_, X, EndX, Y) :-
+displayRow(_, X, EndX, _) :-
   X is EndX.
   
 displayRow(Board, X, EndX, Y) :-
