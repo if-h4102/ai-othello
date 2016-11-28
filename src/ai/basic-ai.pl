@@ -1,16 +1,16 @@
 :- module('basic_ai', []).
 :- use_module('../game/end-of-game', []).
 
-scoreCoefBoard(ScoreBoard) :-  Board = [[1000 ,-30 ,10 ,10 ,10 ,10 ,10 , 10 ,-30 ,1000 ],
-                                        [-30 ,-50 ,-5 ,-5 ,-5 ,-5 ,-5 ,-5 ,-50 ,-30 ],
-                                        [10 ,-5 ,1,1 ,1 ,1 ,1 ,1 ,-5 ,10 ],
-                                        [10 ,-5 ,1,1 ,1 ,1 ,1 ,1 ,-5 ,10 ],
-                                        [10 ,-5 ,1,1 ,1 ,1 ,1 ,1 ,-5 ,10 ],
-                                        [10 ,-5 ,1,1 ,1 ,1 ,1 ,1 ,-5 ,10 ],
-                                        [10 ,-5 ,1,1 ,1 ,1 ,1 ,1 ,-5 ,10 ],
-                                        [10 ,-5 ,1,1 ,1 ,1 ,1 ,1 ,-5 ,10 ],
-                                        [-30 ,-50 ,-5 ,-5 ,-5 ,-5 ,-5 ,-5 ,-50 ,-30 ],
-                                        [1000 ,-30 ,10 ,10 ,10 ,10 ,10 , 10 ,-30 ,1000 ]].
+scoreCoefBoard(ScoreBoard) :- ScoreBoard =  [[1000 ,-30 ,10 ,10 ,10 ,10 ,10 , 10 ,-30 ,1000 ],
+                                            [-30 ,-50 ,-5 ,-5 ,-5 ,-5 ,-5 ,-5 ,-50 ,-30 ],
+                                            [10 ,-5 ,1,1 ,1 ,1 ,1 ,1 ,-5 ,10 ],
+                                            [10 ,-5 ,1,1 ,1 ,1 ,1 ,1 ,-5 ,10 ],
+                                            [10 ,-5 ,1,1 ,1 ,1 ,1 ,1 ,-5 ,10 ],
+                                            [10 ,-5 ,1,1 ,1 ,1 ,1 ,1 ,-5 ,10 ],
+                                            [10 ,-5 ,1,1 ,1 ,1 ,1 ,1 ,-5 ,10 ],
+                                            [10 ,-5 ,1,1 ,1 ,1 ,1 ,1 ,-5 ,10 ],
+                                            [-30 ,-50 ,-5 ,-5 ,-5 ,-5 ,-5 ,-5 ,-50 ,-30 ],
+                                            [1000 ,-30 ,10 ,10 ,10 ,10 ,10 , 10 ,-30 ,1000 ]].
 
 getScoreBoard(Board,Score) :- getScoreBoard(Board,Score,1).
 getScoreBoard(Board,Score,Player) :- getScoreBoard(Board,PlayerIndependantScore,1,1), Score is PlayerIndependantScore*Player.
@@ -33,10 +33,10 @@ bestMove(Board,X,Y,Player) :- possibleMoves(Board,Player,PossibleMoves), foundBe
 
 %foundBestMove(Board,MoveList,BestScore,BestX,BestY,Player)
 foundBestMove(_,[],_,_,_,_).
-foundBestMove(Board,[[X|Y]|Tail],BestScore,BestX,BestY,Player) :-
-        updateBoard(Board,Player,X,Y,NewBoard),
-        getScoreBoard(NewBoard,Score,Player),
-	Score > BestScore,
-	foundBestMove(Board,Tail,Score,X,Y,Player).
+foundBestMove(Board,[[X|Y]|Tail], BestScore, _, _, Player) :-
+    updateBoard(Board, Player, X, Y, NewBoard),
+    getScoreBoard(NewBoard, Score, Player),
+    Score > BestScore,
+    foundBestMove(Board,Tail,Score,X,Y,Player).
 
-foundBestMove(Board,[_|Tail],BestScore,BestX,BestY,Player) :- foundBestMove(Board,Tail,BestScore,BestX,BestY,PLayer).
+foundBestMove(Board,[_|Tail], BestScore, BestX, BestY, Player) :- foundBestMove(Board, Tail, BestScore, BestX, BestY, Player).
