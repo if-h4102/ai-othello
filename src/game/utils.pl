@@ -1,24 +1,25 @@
-:- module(utils, [getVal/3, isCaseEmpty/2, isOnBoard/2, nextCase/4]).
+:- module('utils', [getVal/4, isCaseEmpty/3, isOnBoard/2, nextCase/4]).
+:- use_module('end-of-game', []).
 
-getVal(X, Y, Val)  :- 
-  board(Board),  
+getVal(Board, X, Y, Val)  :- 
   nth0(X, Board, Column), 
   nth0(Y, Column, Val).
   
-isCaseEmpty(X, Y) :-
-  getVal(X, Y, Val),
+isCaseEmpty(Board, X, Y) :-
+  getVal(Board, X, Y, Val),
   var(Val).
 
-isOnBoard(X,Y) :- 
-  X > 0, X < 9, Y > 0, Y < 9.
+isOnBoard(X, Y) :- 
+  between(1, 8, X),
+  between(1, 8, Y).
   
-nextCase(X, Y, NewX, NewY) :-
+nextCase(X, Y, _, _) :-
   isOnBoard(X, Y),
   X == 8,
   Y == 8,
   !,
   fail.
-  
+
 nextCase(X, Y, NewX, NewY) :-
   isOnBoard(X, Y),
   X == 8,
@@ -31,32 +32,36 @@ nextCase(X, Y, NewX, NewY) :-
   NewY is Y.
 
 nextBoard(OldBoard, NewBoard) :-
-  nextBoard(OldBoard, NewBoard, 1, 1).
-  
-% Private Method
-getVal(X, Y, Board, Val)  :-  
-  nth0(X, Board, Column), 
-  nth0(Y, Column, Val).
+  nextBoard(OldBoard, NewBoard, 1, 1), !.
   
 nextBoard(OldBoard, NewBoard, X, Y) :-
-  getVal(X, Y, NewBoard, NewVal),
+  isOnBoard(X,Y),
+  getVal(NewBoard, X, Y, NewVal),
   var(NewVal),
-  getVal(X, Y, OldBoard, OldVar),
-  getVal(X, Y, NewBoard, OldVar),
+  getVal(OldBoard, X, Y, OldVar),
+  getVal(NewBoard, X, Y, OldVar),
   nextCase(X, Y, NewX, NewY),
-  nextBoard(OldBoard, NewBoard, NewX, NewY).
+  nextBoard(OldBoard, NewBoard, NewX, NewY), !.
+  
+nextBoard(OldBoard, NewBoard, X, Y) :-
+  isOnBoard(X,Y),
+  nextCase(X, Y, NewX, NewY),
+  nextBoard(OldBoard, NewBoard, NewX, NewY), !.
+  
+nextBoard( _, _, _, _).
   
   
-updateBoardDirection(_, _, _, _, _, _, 0).
+updateBoardDirection(_, _, _, _, _, _, 0) :- !.
 
-updateBoardDirection(_, _, _, _, _, _, SwappedCaseNumber) :- SwappedCaseNumber < 0.
+updateBoardDirection(_, _, _, _, _, _, SwappedCaseNumber) :- SwappedCaseNumber < 0, !.
     
 updateBoardDirection(NewBoard, Player, X, Y, DeltaX, DeltaY, SwappedCaseNumber) :- 
     NewX is X + DeltaX,
     NewY is Y + DeltaY,
-    getCase(NewBoard,NewX,NewY,Player),
+    getVal(NewBoard,NewX,NewY,Player),
     NewSwappedCaseNumber is SwappedCaseNumber - 1,
-	updateBoardDirection(NewBoard, Player, X, Y, DeltaX, DeltaY, NewSwappedCaseNumber).
+    updateBoardDirection(NewBoard, Player, NewX, NewY, DeltaX, DeltaY, NewSwappedCaseNumber),
+    !.
 
 updateBoard(Board, Player, X, Y, NewBoard) :- 
     NewBoard = [[_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ],
@@ -69,13 +74,14 @@ updateBoard(Board, Player, X, Y, NewBoard) :-
                 [_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ],
                 [_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ],
                 [_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ,_ ]],
-    getCase(NewBoard, X, Y, Player),
-    swappedCaseDirection(Board, X, Y,-1,-1, Player, SwappedCase1), updateBoardDirection(NewBoard, Player, X, Y,-1,-1, SwappedCase1),
-    swappedCaseDirection(Board, X, Y,-1, 0, Player, SwappedCase2), updateBoardDirection(NewBoard, Player, X, Y,-1, 0, SwappedCase2),
-    swappedCaseDirection(Board, X, Y,-1, 1, Player, SwappedCase3), updateBoardDirection(NewBoard, Player, X, Y,-1, 1, SwappedCase3),
-    swappedCaseDirection(Board, X, Y, 0,-1, Player, SwappedCase4), updateBoardDirection(NewBoard, Player, X, Y, 0,-1, SwappedCase4),
-    swappedCaseDirection(Board, X, Y, 0, 1, Player, SwappedCase5), updateBoardDirection(NewBoard, Player, X, Y, 0, 1, SwappedCase5),
-    swappedCaseDirection(Board, X, Y, 1,-1, Player, SwappedCase6), updateBoardDirection(NewBoard, Player, X, Y, 1,-1, SwappedCase6),
-    swappedCaseDirection(Board, X, Y, 1, 0, Player, SwappedCase7), updateBoardDirection(NewBoard, Player, X, Y, 1, 0, SwappedCase7),
-    swappedCaseDirection(Board, X, Y, 1, 1, Player, SwappedCase8), updateBoardDirection(NewBoard, Player, X, Y, 1, 1, SwappedCase8),
-	nextBoard(Board, NewBoard).
+    getVal(NewBoard, X, Y, Player),
+    'end-of-game':swappedCaseDirection(Board, X, Y,-1,-1, Player, SwappedCase1), updateBoardDirection(NewBoard, Player, X, Y,-1,-1, SwappedCase1),
+    'end-of-game':swappedCaseDirection(Board, X, Y,-1, 0, Player, SwappedCase2), updateBoardDirection(NewBoard, Player, X, Y,-1, 0, SwappedCase2),
+    'end-of-game':swappedCaseDirection(Board, X, Y,-1, 1, Player, SwappedCase3), updateBoardDirection(NewBoard, Player, X, Y,-1, 1, SwappedCase3),
+    'end-of-game':swappedCaseDirection(Board, X, Y, 0,-1, Player, SwappedCase4), updateBoardDirection(NewBoard, Player, X, Y, 0,-1, SwappedCase4),
+    'end-of-game':swappedCaseDirection(Board, X, Y, 0, 1, Player, SwappedCase5), updateBoardDirection(NewBoard, Player, X, Y, 0, 1, SwappedCase5),
+    'end-of-game':swappedCaseDirection(Board, X, Y, 1,-1, Player, SwappedCase6), updateBoardDirection(NewBoard, Player, X, Y, 1,-1, SwappedCase6),
+    'end-of-game':swappedCaseDirection(Board, X, Y, 1, 0, Player, SwappedCase7), updateBoardDirection(NewBoard, Player, X, Y, 1, 0, SwappedCase7),
+    'end-of-game':swappedCaseDirection(Board, X, Y, 1, 1, Player, SwappedCase8), updateBoardDirection(NewBoard, Player, X, Y, 1, 1, SwappedCase8),
+    nextBoard(Board, NewBoard),
+    !.

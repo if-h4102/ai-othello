@@ -1,3 +1,4 @@
+:- module(main, []).
 :- use_module(io/display, []).
 
 % Define the predicate which will unify with the current state of the board game.
@@ -20,7 +21,8 @@
 
 run :- 
   writeln('Running...'),
-	display:displayBoard,
+  board(Board),
+	display:displayBoard(Board),
 	writeln('End!').
 
-:- run.
+:- run, halt.

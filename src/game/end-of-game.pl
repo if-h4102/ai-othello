@@ -1,5 +1,5 @@
-:- use_module(game/utils, []).
-
+:- module('end-of-game', []).
+:- use_module('utils').
 
 % Return true is the current player can play, otherwise check if the next player can play
 isGameNotFinished(Board, Player) :- playerCanPlay(Board, Player).
@@ -10,7 +10,42 @@ isGameNotFinished(Board, Player) :- Player2 is -Player, playerCanPlay(Board, Pla
 % prolog won't backtrack and see the next line => return false.
 % Otherwise, go to the next line
 gameOver(Board, Player) :- isGameNotFinished(Board, Player), !, fail.
-gameOver(Board, Player) :- true.
+gameOver(_, _) :- true.
+
+% Get the current score
+% NOTE: there must be only one way to prove the score
+% Therefore, there is a cut after each statement,
+% to avoid exploring useless branches
+getScoreBoard(Board, Score) :-
+    getScoreBoard(Board, Score, 1, 1).
+getScoreBoard(_, Score, 8, 9) :-
+    Score is 0,
+    !.
+% If we try to go too far on Y increment X
+getScoreBoard(Board, Score, LastX, 9) :-
+    X is LastX+1,
+    getScoreBoard(Board,Score,X,1),
+    !.
+% If the case is unset, score don't change
+getScoreBoard(Board, Score, LastX, LastY) :-
+    utils:getVal(Board, LastX, LastY, Case),
+    var(Case),
+    Y is LastY+1,
+    getScoreBoard(Board, Score, LastX, Y),
+    !.
+% Else add the case value to the current score
+getScoreBoard(Board, Score, LastX, LastY) :-
+    utils:getVal(Board, LastX, LastY, Case),
+    Y is LastY+1,
+    getScoreBoard(Board, OldScore, LastX, Y),
+    Score is OldScore+Case,
+    !.
+
+% Get the current winner of the game
+winner(Board, 1) :- getScoreBoard(Board, Score), Score > 0.
+winner(Board, -1) :- getScoreBoard(Board, Score), Score < 0.
+winner(_, Player) :- Player is 0.
+
 
 % Check if a player can play on the board
 playerCanPlay(Board,Player) :- playerCanPlayOnLine(Board,Player,1).
@@ -23,7 +58,7 @@ playerCanPlayOnLine(Board,Player,X) :- NewX is X+1, NewX<9, playerCanPlayOnLine(
 
 
 % Check if a player can play on a given case
-canBePlayed(Board,X,Y,Player) :- isOnBoard(X,Y), isCaseEmpty(X, Y), isSwappingCase(Board,X,Y,Player).
+canBePlayed(Board, X, Y, Player) :- utils:isOnBoard(X,Y), utils:isCaseEmpty(Board, X, Y), isSwappingCase(Board, X, Y, Player).
 
 % SwappedCase is positive if case are swapped and negative or zero else.
 % if the number is positive it's the number of swapped case in the given direction.
@@ -31,23 +66,23 @@ canBePlayed(Board,X,Y,Player) :- isOnBoard(X,Y), isCaseEmpty(X, Y), isSwappingCa
 swappedCaseDirection(Board,Xinit,Yinit,DeltaX,DeltaY,Player,SwappedCase) :-
     X is Xinit+DeltaX,
     Y is Yinit+DeltaY,
-    getVal(X,Y,Case),
+    utils:getVal(Board, X,Y,Case),
     Case == Player,
     SwappedCase is 0,
     !.
 
 % If this doesn't swapp anything return -10
-swappedCaseDirection(Board,Xinit,Yinit,DeltaX,DeltaY,_ ,SwappedCase) :-
+swappedCaseDirection(Board, Xinit,Yinit,DeltaX,DeltaY,_ ,SwappedCase) :-
     X is Xinit+DeltaX,
     Y is Yinit+DeltaY,
-    isCaseEmpty(X, Y),
+    utils:isCaseEmpty(Board, X, Y),
     SwappedCase is -10,
     !.
 
 swappedCaseDirection(Board,Xinit,Yinit,DeltaX,DeltaY,Player,SwappedCase) :-
     X is Xinit+DeltaX,
     Y is Yinit+DeltaY,
-    isOnBoard(X, Y),
+    utils:isOnBoard(X, Y),
     swappedCaseDirection(Board,X,Y,DeltaX,DeltaY,Player,NewSwappedCase),
     SwappedCase is NewSwappedCase + 1.
 

@@ -1,0 +1,14 @@
+language: prolog
+
+sudo: required
+
+before_script:
+  - sudo apt-add-repository ppa:swi-prolog/devel -y
+  - sudo apt-get update -q
+  - sudo apt-get install swi-prolog-nox
+
+script:
+    - swipl test/main.pl
+    
+notifications:
+  slack: ifhexas1:zs56o8LumGUDJMX1iWdQJwRO
