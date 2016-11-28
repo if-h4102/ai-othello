@@ -25,9 +25,9 @@ getScoreBoard(Board,Score,LastX,LastY) :- getCase(Board,LastX,LastY,Case), Y is 
 
 % Compute the list of all possible moves if called this way:
 % possibleMoves(board, player, PossibleMoves)
-possibleMoves(Board, Player, PossibleMoves) :- findAll(Move, canBePlayed(Board, Player, Move), PossibleMoves).
+possibleMoves(Board, Player, PossibleMoves) :- findall(Move, canBePlayed(Board, Player, Move), PossibleMoves).
 % This function returns one possible move
-canBePlayed(Board, Player, Move) :- nth0(0, Move, X), nth0(1, Move, Y), canBePlayed(Board, X, Y, Player).
+canBePlayed(Board, Player, Move) :- nth0(0, Move, X), nth0(1, Move, Y), game:canBePlayed(Board, X, Y, Player).
 
 bestMove(Board,X,Y,Player) :- possibleMoves(Board,Player,PossibleMoves), foundBestMove(Board,PossibleMoves,-99999,X,Y,Player).
 

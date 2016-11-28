@@ -16,7 +16,7 @@ ai0(Board, Player, X, Y) :- repeat, X is (1+random(8)), Y is (1+random(8)), game
 
 % Computes the list of all possible moves if called this way:
 % possibleMoves(board, player, PossibleMoves)
-possibleMoves(Board, Player, PossibleMoves) :- findAll(Move, canBePlayed(Board, Player, Move), PossibleMoves).
+possibleMoves(Board, Player, PossibleMoves) :- findall(Move, canBePlayed(Board, Player, Move), PossibleMoves).
 
 % A bit better AI: AI 1
 % Plays randomly one possible move amongst all possible moves
