@@ -58,7 +58,7 @@ playerCanPlayOnLine(Board,Player,X) :- NewX is X+1, NewX<9, playerCanPlayOnLine(
 
 
 % Check if a player can play on a given case
-canBePlayed(Board,X,Y,Player) :- isOnBoard(X,Y), isCaseEmpty(X, Y), isSwappingCase(Board,X,Y,Player).
+canBePlayed(Board, X, Y, Player) :- utils:isOnBoard(X,Y), utils:isCaseEmpty(Board, X, Y), isSwappingCase(Board, X, Y, Player).
 
 % SwappedCase is positive if case are swapped and negative or zero else.
 % if the number is positive it's the number of swapped case in the given direction.
