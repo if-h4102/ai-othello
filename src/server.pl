@@ -133,7 +133,9 @@ api_board_update(Request) :-
     json_to_prolog(JsonBoard, Board),
     % TODO:
     format(user_output, "Board is ~p~n", [Board]),
-    utils:updateBoard(Board, Player, X, Y, NextBoard),
+    usable_board(Board, UsableBoard),
+    format(user_output, "UsableBoard is ~p~n", [UsableBoard]),
+    utils:updateBoard(UsableBoard, Player, X, Y, NextBoard),
     format(user_output, "NextBoard is ~p~n", [NextBoard]),
     % - make it work with 0s instead of _
     prolog_to_json(NextBoard, JsonBoard),
@@ -228,8 +230,6 @@ api_play_able(Request) :-
 
 %%%%%% Transform the board with 0s to a board usable by the rest of the code (with _)
 
-%usable_board(ZeroedBoard, UsableBoard) :- .
-    
     
 usable_row([0 | []], [UsableHead | []]) :- UsableHead = _, !.
 usable_row([ZeroedHead | []], [UsableHead | []]) :- UsableHead = ZeroedHead.
@@ -240,11 +240,13 @@ usable_board([ZeroedHead | []], [UsableHead | []]) :- usable_row(ZeroedHead, Usa
 usable_board([ZeroedHead | ZeroedTail], [UsableHead | UsableTail]) :- usable_row(ZeroedHead, UsableHead), usable_board(ZeroedTail, UsableTail).
     
     
+jsonable_row([UsableHead | []], [ZeroedHead | []]) :- var(UsableHead), ZeroedHead is 0, !.
+jsonable_row([UsableHead | []], [ZeroedHead | []]) :- ZeroedHead = UsableHead, !.
+jsonable_row([UsableHead | UsableTail], [ZeroedHead | ZeroedTail]) :- var(UsableHead), ZeroedHead is 0, jsonable_row(UsableTail, ZeroedTail), !.
+jsonable_row([UsableHead | UsableTail], [ZeroedHead | ZeroedTail]) :- ZeroedHead = UsableHead, jsonable_row(UsableTail, ZeroedTail), !.
     
-    
-    
-    
-    
+jsonable_board([UsableHead | []], [ZeroedHead | []]) :- jsonable_row(UsableHead, ZeroedHead), !.
+jsonable_board([UsableHead | UsableTail], [ZeroedHead | ZeroedTail]) :- jsonable_row(UsableHead, ZeroedHead), jsonable_board(UsableTail, ZeroedTail), !.
     
     
     
