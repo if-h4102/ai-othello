@@ -132,13 +132,15 @@ api_board_update(Request) :-
     http_read_json_dict(Request, JsonBoard),
     json_to_prolog(JsonBoard, Board),
     % TODO:
-    % - utils:updateBoard(Board, Player, X, Y, NextBoard),
+    format(user_output, "Board is ~p~n", [Board]),
+    utils:updateBoard(Board, Player, X, Y, NextBoard),
+    format(user_output, "NextBoard is ~p~n", [NextBoard]),
     % - make it work with 0s instead of _
-    % - prolog_to_json(NextBoard, JsonBoard),
-    NextBoard = 'This API endpoint is not yet implemented',
+    prolog_to_json(NextBoard, JsonBoard),
+    %NextBoard = 'This API endpoint is not yet implemented',
     cors_enable,
-    % - reply_json_dict(JsonBoard).
-    reply_json_dict(json([error=NextBoard])).
+    reply_json_dict(JsonBoard).
+    %reply_json_dict(json([error=NextBoard])).
     
 % /api/play
 % Requirements: the given board must be a valid one (10*10 containing 0, -1 or 1 only)
@@ -221,8 +223,21 @@ api_play_able(Request) :-
 %%%%%% Launch the server on port 8000
 
 :- server(8000).
+
+
+
+%%%%%% Transform the board with 0s to a board usable by the rest of the code (with _)
+
+%usable_board(ZeroedBoard, UsableBoard) :- .
     
     
+usable_row([0 | []], [UsableHead | []]) :- UsableHead = _, !.
+usable_row([ZeroedHead | []], [UsableHead | []]) :- UsableHead = ZeroedHead.
+usable_row([0 | ZeroedTail], [UsableHead | UsableTail]) :- UsableHead = _, usable_row(ZeroedTail, UsableTail), !.
+usable_row([ZeroedHead | ZeroedTail], [UsableHead | UsableTail]) :- UsableHead = ZeroedHead, usable_row(ZeroedTail, UsableTail).
+    
+usable_board([ZeroedHead | []], [UsableHead | []]) :- usable_row(ZeroedHead, UsableHead), !.
+usable_board([ZeroedHead | ZeroedTail], [UsableHead | UsableTail]) :- usable_row(ZeroedHead, UsableHead), usable_board(ZeroedTail, UsableTail).
     
     
     
