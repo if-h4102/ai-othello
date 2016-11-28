@@ -131,18 +131,16 @@ api_board_update(Request) :-
     ]),
     http_read_json_dict(Request, JsonBoard),
     json_to_prolog(JsonBoard, Board),
-    % TODO:
     format(user_output, "Board is ~p~n", [Board]),
     usable_board(Board, UsableBoard),
     format(user_output, "UsableBoard is ~p~n", [UsableBoard]),
     utils:updateBoard(UsableBoard, Player, X, Y, NextBoard),
     format(user_output, "NextBoard is ~p~n", [NextBoard]),
-    % - make it work with 0s instead of _
-    prolog_to_json(NextBoard, JsonBoard),
-    %NextBoard = 'This API endpoint is not yet implemented',
+    jsonable_board(NextBoard, NewBoard),
+    format(user_output, "NewBoard is ~p~n", [NewBoard]),
+    prolog_to_json(NewBoard, ResBoard),
     cors_enable,
-    reply_json_dict(JsonBoard).
-    %reply_json_dict(json([error=NextBoard])).
+    reply_json_dict(ResBoard).
     
 % /api/play
 % Requirements: the given board must be a valid one (10*10 containing 0, -1 or 1 only)
@@ -173,16 +171,13 @@ api_play_validate(Request) :-
     ]),
     http_read_json_dict(Request, JsonBoard),
     json_to_prolog(JsonBoard, Board),
-    % TODO:
-    % - game:canBePlayed(Board, X, Y, Player),
-    % - Playable = true,
-    Result = "This API endpoint is not yet implemented",
-    Playable = false,
+    usable_board(Board, UsableBoard),
+    game:canBePlayed(UsableBoard, X, Y, Player),
+    Playable = true,
     cors_enable,
-    % - reply_json_dict(json([move=json([x=X, y=Y]), board=Board, playable=Playable])).
-    reply_json_dict(json([error=Result, move=json([x=X, y=Y]), board=Board, playable=Playable])).
+    reply_json_dict(json([move=json([x=X, y=Y]), board=Board, playable=Playable])).
 % In case the move can't be played
-/* api_play_validate(Request) :-
+api_play_validate(Request) :-
     http_parameters(Request, [
       player(Player, [integer, oneof([-1, 1])]),
       movex(X, [integer, between(1, 8)]),
@@ -190,9 +185,10 @@ api_play_validate(Request) :-
     ]),
     http_read_json_dict(Request, JsonBoard),
     json_to_prolog(JsonBoard, Board),
+    usable_board(Board, UsableBoard),
     Playable = false,
     cors_enable,
-    reply_json_dict(json([move=json([x=X, y=Y]), board=Board, playable=Playable])). */
+    reply_json_dict(json([move=json([x=X, y=Y]), board=Board, playable=Playable])).
 
 % /api/play/able
 % Requirements: the given board must be a valid one (10*10 containing 0, -1 or 1 only)
