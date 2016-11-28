@@ -49,7 +49,7 @@ updateBoardDirection(_, _, _, _, _, _, SwappedCaseNumber) :- SwappedCaseNumber <
 updateBoardDirection(NewBoard, Player, X, Y, DeltaX, DeltaY, SwappedCaseNumber) :- 
     NewX is X + DeltaX,
     NewY is Y + DeltaY,
-    getCase(NewBoard,NewX,NewY,Player),
+    getVal(NewBoard,NewX,NewY,Player),
     NewSwappedCaseNumber is SwappedCaseNumber - 1,
 	updateBoardDirection(NewBoard, Player, X, Y, DeltaX, DeltaY, NewSwappedCaseNumber).
 
