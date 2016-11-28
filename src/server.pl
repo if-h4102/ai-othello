@@ -79,6 +79,7 @@ server(Port) :- http_server(http_dispatch, [port(Port)]).
 %     x: <movex>,
 %     y: <movey>,
 %   },
+%   player: <player>,
 %   board: <the_given_board>,
 %   playable: true | false
 % }
@@ -163,6 +164,8 @@ api_play(Request) :-
     
 % /api/play/validate
 % Requirements: the given board must be a valid one (10*10 containing 0, -1 or 1 only)
+playable(UsableBoard, X, Y, Player, Playable) :- game:canBePlayed(UsableBoard, X, Y, Player), Playable = true.
+playable(_, _, _, _, Playable) :- Playable = false.
 api_play_validate(Request) :-
     http_parameters(Request, [
       player(Player, [integer, oneof([-1, 1])]),
@@ -172,23 +175,9 @@ api_play_validate(Request) :-
     http_read_json_dict(Request, JsonBoard),
     json_to_prolog(JsonBoard, Board),
     usable_board(Board, UsableBoard),
-    game:canBePlayed(UsableBoard, X, Y, Player),
-    Playable = true,
+    playable(UsableBoard, X, Y, Player, Playable),
     cors_enable,
-    reply_json_dict(json([move=json([x=X, y=Y]), board=Board, playable=Playable])).
-% In case the move can't be played
-api_play_validate(Request) :-
-    http_parameters(Request, [
-      player(Player, [integer, oneof([-1, 1])]),
-      movex(X, [integer, between(1, 8)]),
-      movey(Y, [integer, between(1, 8)])
-    ]),
-    http_read_json_dict(Request, JsonBoard),
-    json_to_prolog(JsonBoard, Board),
-    usable_board(Board, UsableBoard),
-    Playable = false,
-    cors_enable,
-    reply_json_dict(json([move=json([x=X, y=Y]), board=Board, playable=Playable])).
+    reply_json_dict(json([move=json([x=X, y=Y]), player=Player, board=JsonBoard, playable=Playable])).
 
 % /api/play/able
 % Requirements: the given board must be a valid one (10*10 containing 0, -1 or 1 only)
