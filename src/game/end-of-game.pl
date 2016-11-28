@@ -66,7 +66,7 @@ canBePlayed(Board,X,Y,Player) :- isOnBoard(X,Y), isCaseEmpty(X, Y), isSwappingCa
 swappedCaseDirection(Board,Xinit,Yinit,DeltaX,DeltaY,Player,SwappedCase) :-
     X is Xinit+DeltaX,
     Y is Yinit+DeltaY,
-    getVal(Board, X,Y,Case),
+    utils:getVal(Board, X,Y,Case),
     Case == Player,
     SwappedCase is 0,
     !.
@@ -75,14 +75,14 @@ swappedCaseDirection(Board,Xinit,Yinit,DeltaX,DeltaY,Player,SwappedCase) :-
 swappedCaseDirection(Board, Xinit,Yinit,DeltaX,DeltaY,_ ,SwappedCase) :-
     X is Xinit+DeltaX,
     Y is Yinit+DeltaY,
-    isCaseEmpty(Board, X, Y),
+    utils:isCaseEmpty(Board, X, Y),
     SwappedCase is -10,
     !.
 
 swappedCaseDirection(Board,Xinit,Yinit,DeltaX,DeltaY,Player,SwappedCase) :-
     X is Xinit+DeltaX,
     Y is Yinit+DeltaY,
-    isOnBoard(Board, X, Y),
+    utils:isOnBoard(X, Y),
     swappedCaseDirection(Board,X,Y,DeltaX,DeltaY,Player,NewSwappedCase),
     SwappedCase is NewSwappedCase + 1.
 
