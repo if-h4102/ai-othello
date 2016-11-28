@@ -95,6 +95,7 @@ server(Port) :- http_server(http_dispatch, [port(Port)]).
 % Result: json object
 % {
 %   board: <the_given_board>,
+%   player: <player>,
 %   playable: true | false
 % }
 :- http_handler('/api/play/able', api_play_able, []).
@@ -181,30 +182,18 @@ api_play_validate(Request) :-
 
 % /api/play/able
 % Requirements: the given board must be a valid one (10*10 containing 0, -1 or 1 only)
+ableToPlay(Board, Player, Able) :- game:playerCanPlay(Board, Player), Able = true.
+ableToPlay(_, _, Able) :- Able = false.
 api_play_able(Request) :-
     http_parameters(Request, [
       player(Player, [integer, oneof([-1, 1])])
     ]),
     http_read_json_dict(Request, JsonBoard),
     json_to_prolog(JsonBoard, Board),
-    % TODO
-    % - game:playerCanPlay(Board, Player),
-    % - Playable = true,
-    Result = "This API endpoint is not yet implemented",
-    Playable = false,
+    usable_board(Board, UsableBoard),
+    ableToPlay(UsableBoard, Player, Able),
     cors_enable,
-    % - reply_json_dict(json([board=Board, playable=Playable])).
-    reply_json_dict(json([error=Result, board=Board, playable=Playable])).
-% In case the has no move remaining
-/* api_play_validate(Request) :-
-    http_parameters(Request, [
-      player(Player, [integer, oneof([-1, 1])])
-    ]),
-    http_read_json_dict(Request, JsonBoard),
-    json_to_prolog(JsonBoard, Board),
-    Playable = false,
-    cors_enable,
-    reply_json_dict(json([board=Board, playable=Playable])). */
+    reply_json_dict(json([board=JsonBoard, player=Player, playable=Able])).
     
     
 %%%%%% Launch the server on port 8000
