@@ -147,14 +147,11 @@ api_play(Request) :-
       player(Player, [integer, oneof([-1, 1])]),
       ai(Ai, [integer, between(0, 3)])  % NOTE: for the moment, only (0, 2) (min-max AI not implemented yet)
     ]),
-    format(user_output, "Request is ~p~n", [Request]),
     http_read_json_dict(Request, JsonBoard),
     json_to_prolog(JsonBoard, Board),
     usable_board(Board, UsableBoard),
-    format(user_output, "UsableBoard is ~p~n", [UsableBoard]),
     ai:bestMove(UsableBoard, Player, Ai, X, Y),
     !,  % To prevent the case where several best moves are possible from happening
-    format(user_output, "Best move found is ~p~n", [[X, Y]]),
     utils:updateBoard(UsableBoard, Player, X, Y, NextBoard),
     jsonable_board(NextBoard, NewBoard),
     prolog_to_json(NewBoard, ResBoard),
@@ -163,7 +160,7 @@ api_play(Request) :-
     
 % /api/play/validate
 % Requirements: the given board must be a valid one (10*10 containing 0, -1 or 1 only)
-playable(UsableBoard, X, Y, Player, Playable) :- game:canBePlayed(UsableBoard, X, Y, Player), Playable = true.
+playable(UsableBoard, X, Y, Player, Playable) :- end_of_game:canBePlayed(UsableBoard, X, Y, Player), Playable = true.
 playable(_, _, _, _, Playable) :- Playable = false.
 api_play_validate(Request) :-
     http_parameters(Request, [
@@ -180,7 +177,7 @@ api_play_validate(Request) :-
 
 % /api/play/able
 % Requirements: the given board must be a valid one (10*10 containing 0, -1 or 1 only)
-ableToPlay(Board, Player, Able) :- game:playerCanPlay(Board, Player), Able = true.
+ableToPlay(Board, Player, Able) :- end_of_game:playerCanPlay(Board, Player), Able = true.
 ableToPlay(_, _, Able) :- Able = false.
 api_play_able(Request) :-
     http_parameters(Request, [
