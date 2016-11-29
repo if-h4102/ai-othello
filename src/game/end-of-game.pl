@@ -1,4 +1,4 @@
-:- module('end-of-game', []).
+:- module('end_of_game', []).
 :- use_module('utils').
 
 % Return true is the current player can play, otherwise check if the next player can play

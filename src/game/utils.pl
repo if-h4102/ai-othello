@@ -112,14 +112,14 @@ updateBoard(Board, Player, X, Y, NewBoard) :-
     % Put the cell (X, Y) to Player
     getVal(NewBoard, X, Y, Player),
     % Swap all necessary cell to Player
-    'end-of-game':swappedCaseDirection(Board, X, Y,-1,-1, Player, SwappedCase1), updateBoardDirection(NewBoard, Player, X, Y,-1,-1, SwappedCase1),
-    'end-of-game':swappedCaseDirection(Board, X, Y,-1, 0, Player, SwappedCase2), updateBoardDirection(NewBoard, Player, X, Y,-1, 0, SwappedCase2),
-    'end-of-game':swappedCaseDirection(Board, X, Y,-1, 1, Player, SwappedCase3), updateBoardDirection(NewBoard, Player, X, Y,-1, 1, SwappedCase3),
-    'end-of-game':swappedCaseDirection(Board, X, Y, 0,-1, Player, SwappedCase4), updateBoardDirection(NewBoard, Player, X, Y, 0,-1, SwappedCase4),
-    'end-of-game':swappedCaseDirection(Board, X, Y, 0, 1, Player, SwappedCase5), updateBoardDirection(NewBoard, Player, X, Y, 0, 1, SwappedCase5),
-    'end-of-game':swappedCaseDirection(Board, X, Y, 1,-1, Player, SwappedCase6), updateBoardDirection(NewBoard, Player, X, Y, 1,-1, SwappedCase6),
-    'end-of-game':swappedCaseDirection(Board, X, Y, 1, 0, Player, SwappedCase7), updateBoardDirection(NewBoard, Player, X, Y, 1, 0, SwappedCase7),
-    'end-of-game':swappedCaseDirection(Board, X, Y, 1, 1, Player, SwappedCase8), updateBoardDirection(NewBoard, Player, X, Y, 1, 1, SwappedCase8),
+    end_of_game:swappedCaseDirection(Board, X, Y,-1,-1, Player, SwappedCase1), updateBoardDirection(NewBoard, Player, X, Y,-1,-1, SwappedCase1),
+    end_of_game:swappedCaseDirection(Board, X, Y,-1, 0, Player, SwappedCase2), updateBoardDirection(NewBoard, Player, X, Y,-1, 0, SwappedCase2),
+    end_of_game:swappedCaseDirection(Board, X, Y,-1, 1, Player, SwappedCase3), updateBoardDirection(NewBoard, Player, X, Y,-1, 1, SwappedCase3),
+    end_of_game:swappedCaseDirection(Board, X, Y, 0,-1, Player, SwappedCase4), updateBoardDirection(NewBoard, Player, X, Y, 0,-1, SwappedCase4),
+    end_of_game:swappedCaseDirection(Board, X, Y, 0, 1, Player, SwappedCase5), updateBoardDirection(NewBoard, Player, X, Y, 0, 1, SwappedCase5),
+    end_of_game:swappedCaseDirection(Board, X, Y, 1,-1, Player, SwappedCase6), updateBoardDirection(NewBoard, Player, X, Y, 1,-1, SwappedCase6),
+    end_of_game:swappedCaseDirection(Board, X, Y, 1, 0, Player, SwappedCase7), updateBoardDirection(NewBoard, Player, X, Y, 1, 0, SwappedCase7),
+    end_of_game:swappedCaseDirection(Board, X, Y, 1, 1, Player, SwappedCase8), updateBoardDirection(NewBoard, Player, X, Y, 1, 1, SwappedCase8),
     % Copie all the cell not changed by the move from OldBoard to NewBoard.
     nextBoard(Board, NewBoard),
     !.

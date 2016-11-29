@@ -1,9 +1,9 @@
-:- module(random_ai, []).
+:- module('random_ai', []).
 :- use_module('../game/end-of-game', []).
 
 % This function returns one possible move,
 % wrapped in an array of size 2.
-canBePlayed(Board, Player, Move) :- nth0(0, Move, X), nth0(1, Move, Y), game:canBePlayed(Board, X, Y, Player).
+canBePlayed(Board, Player, Move) :- nth0(0, Move, X), nth0(1, Move, Y), end_of_game:canBePlayed(Board, X, Y, Player).
 
 % The board is represented this way:
 % [[-, ..., _], ..., [-, ..., _]]
@@ -12,7 +12,7 @@ canBePlayed(Board, Player, Move) :- nth0(0, Move, X), nth0(1, Move, Y), game:can
 % Returns the first coordinates (X, Y) of the next move if you call it this way:
 % play(board, player, X, Y)
 % This is the AI 0 : totally random
-ai0(Board, Player, X, Y) :- repeat, X is (1+random(8)), Y is (1+random(8)), game:canBePlayed(Board, X, Y, Player).
+ai0(Board, Player, X, Y) :- repeat, X is (1+random(8)), Y is (1+random(8)), end_of_game:canBePlayed(Board, X, Y, Player).
 
 % Computes the list of all possible moves if called this way:
 % possibleMoves(board, player, PossibleMoves)
@@ -26,5 +26,4 @@ ai1(Board, Player, X, Y) :-
     Index is random(PossibleMovesLength),
     nth0(Index, PossibleMoves, Move),
     nth0(0, Move, X),
-    nth0(1, Move, Y),
-    format(user_output, "X is ~p~n", [X]).
+    nth0(1, Move, Y).

@@ -1,4 +1,4 @@
-:- module(display, [displayBoard/1]).
+:- module('display', [displayBoard/1]).
 :- use_module('../game/utils', []).
 
 displayCell(Val) :- var(Val), write('   |'), !.
