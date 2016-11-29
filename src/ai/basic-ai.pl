@@ -57,13 +57,13 @@ foundBestMove(Board,[[X|Y]|Tail], BestScore, BestX, BestY, Player) :-
             var(NewBestX), 
             var(NewBestY), 
             BestX is NewBestX, 
-            BestY is NewBastY )
+            BestY is NewBestY )
         ;
         ( 
             BestX is X,
             BestY is Y 
         )
-    )
+    ),
     !.
 
 foundBestMove(Board,[_|Tail], BestScore, BestX, BestY, Player) :- 
