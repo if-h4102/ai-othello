@@ -15,16 +15,19 @@ gameloop() :-
 	write('Player 1 is a '), writeln(Player1Type),
 	write('Player 2 is a '), writeln(Player2Type).
 
+%%%%% determineFirstPlayer(-FirstPlayer)
 % Determine randomly the first player.
 determineFirstPlayer(FirstPlayer) :- maybe(1, 2), FirstPlayer is -1, !.
 determineFirstPlayer(FirstPlayer) :- FirstPlayer is 1.
 
+%%%%% determinePlayerType(+Player1Type, +Player2Type, +Player, -PlayerType).
 % Determine the type of a given player.
 determinePlayerType(Player1Type, _, Player, PlayerType) :-
 	Player == -1, PlayerType is Player1Type, !.
 determinePlayerType(_, Player2Type, _, PlayerType) :-
 	PlayerType is Player2Type.
 
+%%%%% play(+Board, +Player, +Player1Type, +Player2Type)
 % Play while the game isn't finished.
 play(Board, Player, _, _) :- 'end-of-game':gameOver(Board, Player), !.
 play(Board, Player, Player1Type, Player2Type) :-
@@ -40,6 +43,7 @@ play(Board, Player, Player1Type, Player2Type) :-
 	PlayerType == 1,
 	aiPlay(Board, Player).
 
+%%%%% humanPlay(+Board, +Player, -X, -Y)
 % Ask to a human player where he wants to play.
 humanPlay(Board, Player, X, Y) :-
 	printPlayerSymbol(Player),
@@ -49,10 +53,12 @@ humanPlay(Board, Player, X, Y) :-
 	read(Ytmp),
 	checkGivenCoordinates(Board, Player, X, Y, Xtmp, Ytmp).
 
+%%%%% printPlayerSymbol(+Player)
 % Print the symbol to the given player.
 printPlayerSymbol(Player) :- Player == -1, writeln('You use the symbol : x'), !.
 printPlayerSymbol(_) :- writeln('You use the symbol : o').
 
+%%%%% checkGivenCoordinates(+Board, +Player, -X, -Y, +Xtmp, +Ytmp)
 % Check if the coordinates given by the human player are valid.
 checkGivenCoordinates(Board, Player, X, Y, Xtmp, Ytmp) :-
 	'end-of-game':canBePlayed(Board, Xtmp, Ytmp, Player),
