@@ -133,13 +133,9 @@ api_board_update(Request) :-
     ]),
     http_read_json_dict(Request, JsonBoard),
     json_to_prolog(JsonBoard, Board),
-    format(user_output, "Board is ~p~n", [Board]),
     usable_board(Board, UsableBoard),
-    format(user_output, "UsableBoard is ~p~n", [UsableBoard]),
     utils:updateBoard(UsableBoard, Player, X, Y, NextBoard),
-    format(user_output, "NextBoard is ~p~n", [NextBoard]),
     jsonable_board(NextBoard, NewBoard),
-    format(user_output, "NewBoard is ~p~n", [NewBoard]),
     prolog_to_json(NewBoard, ResBoard),
     cors_enable,
     reply_json_dict(ResBoard).
