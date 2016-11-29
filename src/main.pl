@@ -25,4 +25,4 @@ run :-
 	display:displayBoard(Board),
 	writeln('End!').
 
-:- run, halt.
+:- run.
