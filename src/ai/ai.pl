@@ -1,7 +1,7 @@
 :- module('ai', []).
 :- use_module('random-ai', []).
 :- use_module('basic-ai', []).
-% :- use_module('min_max_ai', []).
+% :- use_module('min-max-ai', []).
 
 %%%%% bestMove(Board, Player, Ai, X, Y)
 % Returns the best move (X, Y) according to the given Ai

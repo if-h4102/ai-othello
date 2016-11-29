@@ -1,4 +1,4 @@
-:- module(random_ai, []).
+:- module('random_ai', []).
 :- use_module('../game/end-of-game', []).
 
 % This function returns one possible move,
@@ -26,5 +26,4 @@ ai1(Board, Player, X, Y) :-
     Index is random(PossibleMovesLength),
     nth0(Index, PossibleMoves, Move),
     nth0(0, Move, X),
-    nth0(1, Move, Y),
-    format(user_output, "X is ~p~n", [X]).
+    nth0(1, Move, Y).

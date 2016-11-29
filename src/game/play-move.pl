@@ -1,4 +1,4 @@
-:- module(play-move, [playMove/4]).
+:- module('play_move', [playMove/4]).
 :- use_module(gameutils, []).
 
 

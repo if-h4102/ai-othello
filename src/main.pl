@@ -1,5 +1,5 @@
-:- module(main, []).
-:- use_module(io/display, []).
+:- module('main', []).
+:- use_module('io/display', []).
 
 % Define the predicate which will unify with the current state of the board game.
 :- dynamic board/1.		% "dynamic" means that predicate's definition may change during run time
