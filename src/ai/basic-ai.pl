@@ -47,11 +47,23 @@ bestMove(Board,X,Y,Player) :- possibleMoves(Board,Player,PossibleMoves), foundBe
 
 %foundBestMove(Board,MoveList,BestScore,BestX,BestY,Player)
 foundBestMove(_,[],_,_,_,_) :- format(user_output, 'end', []), !.
-foundBestMove(Board,[[X|Y]|Tail], BestScore, X, Y, Player) :-
+foundBestMove(Board,[[X|Y]|Tail], BestScore, BestX, BestY, Player) :-
     utils:updateBoard(Board, Player, X, Y, NewBoard),
     getScoreBoard(NewBoard, Score, Player),
     Score > BestScore,
-    foundBestMove(Board,Tail,Score,X,Y,Player),
+    foundBestMove(Board,Tail,Score,NewBestX,NewBestY,Player),
+    ( % if a better score is found set return var with it else use the current one
+        ( 
+            var(NewBestX), 
+            var(NewBestY), 
+            BestX is NewBestX, 
+            BestY is NewBastY )
+        ;
+        ( 
+            BestX is X,
+            BestY is Y 
+        )
+    )
     !.
 
 foundBestMove(Board,[_|Tail], BestScore, BestX, BestY, Player) :- 
