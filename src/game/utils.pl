@@ -1,4 +1,4 @@
-:- module('utils', [getVal/4, isCaseEmpty/3, isOnBoard/2, nextCase/4]).
+:- module('utils', [getVal/4, isCaseEmpty/3, isOnBoard/2, nextCase/4, updateBoard/5]).
 :- use_module('end-of-game', []).
 
 % getVal(+Board, +X, +Y, ?Val)
