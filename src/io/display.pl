@@ -11,11 +11,11 @@ displayCell(Board, X, NewX, Y) :-
   NewX is X + 1.
 
 displayRow(Board, Y, NewY):- 
-  write('|'),
+  write(Y), write(' |'),
   displayRow(Board, 1, 9, Y),
   NewY is Y + 1,
   writeln(''),
- 	writeln('---------------------------------').
+ 	writeln('  ---------------------------------').
   
 displayRow(_, X, EndX, _) :-
   X is EndX.
@@ -25,7 +25,8 @@ displayRow(Board, X, EndX, Y) :-
   displayRow(Board, NewX, EndX, Y).
   
 displayBoard(Board) :- 
-	writeln('---------------------------------'),
+  writeln('    1   2   3   4   5   6   7   8  '),
+  writeln('  ---------------------------------'),
   displayBoard(Board, 1, 9).
  
 displayBoard(_, Y, EndY) :- 
