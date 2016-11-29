@@ -2,7 +2,6 @@
 :- use_module('../io/display', []).
 :- use_module('../game/end-of-game', []).
 :- use_module('../game/utils', []).
-
 % Player type can be 0 (human) or 1 (ai).
 gameloop() :-
 	writeln('What is the type of the first player (0 for human, 1 for ai)'),
@@ -31,7 +30,7 @@ play(Board, Player, _, _) :- 'end-of-game':gameOver(Board, Player), !.
 play(Board, Player, Player1Type, Player2Type) :-
 	determinePlayerType(Player1Type, Player2Type, Player, PlayerType),
 	PlayerType == 0,
-	humanPlay(X, Y),
+	humanPlay(Board, Player, X, Y),
 	utils:updateBoard(Board, Player, X, Y, NewBoard),
 	display:displayBoard(NewBoard),
 	NewPlayer is -Player,
@@ -42,11 +41,27 @@ play(Board, Player, Player1Type, Player2Type) :-
 	aiPlay(Board, Player).
 
 % Ask to a human player where he wants to play.
-humanPlay(X, Y) :-
+humanPlay(Board, Player, X, Y) :-
+	printPlayerSymbol(Player),
 	writeln('At which abscissa do you want to play ?'),
-	read(X),
+	read(Xtmp),
 	writeln('At which ordinate do you want to play ?'),
-	read(Y).
+	read(Ytmp),
+	checkGivenCoordinates(Board, Player, X, Y, Xtmp, Ytmp).
+
+% Print the symbol to the given player.
+printPlayerSymbol(Player) :- Player == -1, writeln('You use the symbol : x'), !.
+printPlayerSymbol(_) :- writeln('You use the symbol : o').
+
+% Check if the coordinates given by the human player are valid.
+checkGivenCoordinates(Board, Player, X, Y, Xtmp, Ytmp) :-
+	'end-of-game':canBePlayed(Board, Xtmp, Ytmp, Player),
+	X is Xtmp,
+	Y is Ytmp, !.
+checkGivenCoordinates(Board, Player, X, Y, _, _) :-
+	writeln('The square you choosed is invalid, please choose an other one.'),
+	humanPlay(Board, Player, X, Y).
+
 
 % Ask to an ai where it wants to play.
-aiPlay(_, _) :- .
+aiPlay(_, _) :- writeln('Ai plays').
