@@ -2,19 +2,19 @@
 :- use_module('../io/display', []).
 :- use_module('../game/end-of-game', []).
 :- use_module('../game/utils', []).
-:- use_module('../ai/random-ai', []).
+:- use_module('../ai/ai', []).
 
 gameloop() :-
-	writeln('What is the type of the first player (0 for human, 1 for ai)'),
+	writeln('What is the type of the first player which will use the symbol x ?'),
+	writeln('Type -1 for a human player or a number between 0 and 3 to select an ai with the given level.'),
 	read(Player1Type),
-	writeln('What is the type of the second player (0 for human, 1 for ai)'),
+	writeln('What is the type of the second player which will use the symbol o ?'),
+	writeln('Type -1 for a human player or a number between 0 and 3 to select an ai with the given level.'),
 	read(Player2Type),
 	main:board(Board),
 	display:displayBoard(Board),
 	determineFirstPlayer(FirstPlayer),
-	play(Board,FirstPlayer, Player1Type, Player2Type),
-	write('Player 1 is a '), writeln(Player1Type),
-	write('Player 2 is a '), writeln(Player2Type).
+	play(Board,FirstPlayer, Player1Type, Player2Type).
 
 %%%%% determineFirstPlayer(-FirstPlayer)
 % Determine randomly the first player.
@@ -33,20 +33,22 @@ determinePlayerType(_, Player2Type, _, PlayerType) :-
 play(Board, Player, _, _) :- 'end_of_game':gameOver(Board, Player), !.
 play(Board, Player, Player1Type, Player2Type) :-
 	determinePlayerType(Player1Type, Player2Type, Player, PlayerType),
-	PlayerType == 0,
+	PlayerType == -1,
 	humanPlay(Board, Player, X, Y),
-	utils:updateBoard(Board, Player, X, Y, NewBoard),
-	display:displayBoard(NewBoard),
-	NewPlayer is -Player,
-	play(NewBoard,NewPlayer, Player1Type, Player2Type).
+	updateDisplayBoard(Board, Player, X, Y, Player1Type, Player2Type).
 play(Board, Player, Player1Type, Player2Type) :-
 	determinePlayerType(Player1Type, Player2Type, Player, PlayerType),
-	PlayerType == 1,
-	aiPlay(Board, Player, X, Y),
+	ai:bestMove(Board, Player, PlayerType, X, Y),
+	updateDisplayBoard(Board, Player, X, Y, Player1Type, Player2Type).
+
+%%%%% updateDisplayBoard(+Board, +Player, +X, +Y, +Player1Type, +Player2Type).
+% Update and display the board taking into account the new play at (X, Y) coordinates.
+updateDisplayBoard(Board, Player, X, Y, Player1Type, Player2Type) :-
 	utils:updateBoard(Board, Player, X, Y, NewBoard),
 	display:displayBoard(NewBoard),
 	NewPlayer is -Player,
 	play(NewBoard,NewPlayer, Player1Type, Player2Type).
+
 
 %%%%% humanPlay(+Board, +Player, -X, -Y)
 % Ask to a human player where he wants to play.
@@ -72,7 +74,3 @@ checkGivenCoordinates(Board, Player, X, Y, Xtmp, Ytmp) :-
 checkGivenCoordinates(Board, Player, X, Y, _, _) :-
 	writeln('The square you choosed is invalid, please choose an other one.'),
 	humanPlay(Board, Player, X, Y).
-
-
-% Ask to an ai where it wants to play.
-aiPlay(Board, Player, X, Y) :- random_ai:ai0(Board, Player, X, Y).
