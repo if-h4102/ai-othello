@@ -30,16 +30,23 @@ determinePlayerType(_, Player2Type, _, PlayerType) :-
 
 %%%%% play(+Board, +Player, +Player1Type, +Player2Type)
 % Play while the game isn't finished.
-play(Board, Player, _, _) :- 'end_of_game':gameOver(Board, Player), !.
+play(Board, Player, _, _) :-
+	'end_of_game':gameOver(Board, Player),
+	'end_of_game':winner(Board, Winner),
+	display:displayWinner(Winner),
+	!.
 play(Board, Player, Player1Type, Player2Type) :-
+	'end_of_game':playerCanPlay(Board, Player),
 	determinePlayerType(Player1Type, Player2Type, Player, PlayerType),
 	PlayerType == -1,
 	humanPlay(Board, Player, X, Y),
 	updateDisplayBoard(Board, Player, X, Y, Player1Type, Player2Type).
 play(Board, Player, Player1Type, Player2Type) :-
+	'end_of_game':playerCanPlay(Board, Player),
 	determinePlayerType(Player1Type, Player2Type, Player, PlayerType),
 	ai:bestMove(Board, Player, PlayerType, X, Y),
 	updateDisplayBoard(Board, Player, X, Y, Player1Type, Player2Type).
+play(_, _, _, _).
 
 %%%%% updateDisplayBoard(+Board, +Player, +X, +Y, +Player1Type, +Player2Type).
 % Update and display the board taking into account the new play at (X, Y) coordinates.
