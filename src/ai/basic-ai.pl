@@ -55,19 +55,13 @@ foundBestMove(Board, [Move|Tail], BestScore, BestX, BestY, Player) :-
         ( 
             var(NewBestX), 
             var(NewBestY), 
-            writeln(1),
-            BestX is X,
-            writeln(2), 
-            BestY is Y,
-            writeln(3)
+            BestX is X, 
+            BestY is Y
         )
         ;
         ( 
-            writeln(4),
             BestX is NewBestX,
-            writeln(5),
-            BestY is NewBestY,
-            writeln(6) 
+            BestY is NewBestY
         )
     ), 
     !.
