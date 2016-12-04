@@ -7,10 +7,10 @@
 gameloop() :-
 	writeln('What is the type of the first player which will use the symbol x ?'),
 	writeln('Type -1 for a human player or a number between 0 and 3 to select an ai with the given level.'),
-	read(Player1Type),
+	readInt(Player1Type, -2, 4),
 	writeln('What is the type of the second player which will use the symbol o ?'),
 	writeln('Type -1 for a human player or a number between 0 and 3 to select an ai with the given level.'),
-	read(Player2Type),
+	readInt(Player2Type, -2, 4),
 	main:board(Board),
 	display:displayBoard(Board),
 	determineFirstPlayer(FirstPlayer),
@@ -66,9 +66,9 @@ updateDisplayBoard(Board, Player, X, Y, Player1Type, Player2Type) :-
 humanPlay(Board, Player, X, Y) :-
 	printPlayerSymbol(Player),
 	writeln('At which abscissa do you want to play ?'),
-	read(Xtmp),
+	readInt(Xtmp, 0, 9),
 	writeln('At which ordinate do you want to play ?'),
-	read(Ytmp),
+	readInt(Ytmp, 0, 9),
 	checkGivenCoordinates(Board, Player, X, Y, Xtmp, Ytmp).
 
 %%%%% printPlayerSymbol(+Player)
@@ -85,3 +85,26 @@ checkGivenCoordinates(Board, Player, X, Y, Xtmp, Ytmp) :-
 checkGivenCoordinates(Board, Player, X, Y, _, _) :-
 	writeln('The square you choosed is invalid, please choose an other one.'),
 	humanPlay(Board, Player, X, Y).
+
+%%%%% readInt(-X)
+% read a user input until it is an integer.
+% From the second input to the end, print ' Please enter an integer ' before each input.
+readInt(X) :-
+    read(X), integer(X), !.
+readInt(X) :-
+    repeat, write(' Please enter an integer '), read(X), integer(X), !.
+
+%%%%% readInt(-X, +Min, +Max)
+% read a user input until it is an integer and is between Min and Max (exclusive).
+% When the method below is uncommented and fail, prolog will not call the second readInt/3 (WHY??).
+%readInt(X, Min, Max) :-
+%    writeln('readInt3'), readInt(X), writeln('AfterReadInt'), X < Max, writeln('afterMax'), X > Min, writeln('afterMin'), !.
+readInt(X, Min, Max) :-
+    repeat, 
+    write('The value must be between '), write(Min), write(' and '), write(Max), writeln(' (exclusive)'),
+    readInt(X),
+    X < Max,
+    X > Min,
+    !.
+
+
