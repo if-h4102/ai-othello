@@ -1,5 +1,6 @@
 :- module('random_ai', []).
 :- use_module('../game/end-of-game', []).
+:- use_module('ai', [possibleMoves/3]).
 
 % This function returns one possible move,
 % wrapped in an array of size 2.
@@ -16,12 +17,13 @@ ai0(Board, Player, X, Y) :- repeat, X is (1+random(8)), Y is (1+random(8)), end_
 
 % Computes the list of all possible moves if called this way:
 % possibleMoves(board, player, PossibleMoves)
-possibleMoves(Board, Player, PossibleMoves) :- findall(Move, canBePlayed(Board, Player, Move), PossibleMoves).
+%possibleMoves(Board, Player, PossibleMoves) :- findall(Move, canBePlayed(Board, Player, Move), PossibleMoves).
 
 % A bit better AI: AI 1
 % Plays randomly one possible move amongst all possible moves
 ai1(Board, Player, X, Y) :-
-    possibleMoves(Board, Player, PossibleMoves),
+    ai:possibleMoves(Board, Player, PossibleMoves),
+    writeln(PossibleMoves),
     length(PossibleMoves, PossibleMovesLength),
     Index is random(PossibleMovesLength),
     nth0(Index, PossibleMoves, Move),

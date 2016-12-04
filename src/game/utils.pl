@@ -1,5 +1,6 @@
-:- module('utils', [getVal/4, isCaseEmpty/3, isOnBoard/2, nextCase/4, updateBoard/5]).
+:- module('utils', [getVal/4, isCaseEmpty/3, isOnBoard/2, updateBoard/5]).
 :- use_module('end-of-game', []).
+:- use_module('../io/display', []).
 
 % getVal(+Board, +X, +Y, ?Val)
 % If Val is instanciated, it becomes the value of the cell (X, Y).
@@ -24,26 +25,16 @@ isOnBoard(X, Y) :-
 
 % nextCase(+X, +Y, -NewX, -NewY)
 % Returns the next cell of the board, after the cell (X, Y).
-% If the cell is the cell (8, 8), returns false (no other cell available).
-
-% Returns false if the current cell is (8, 8).
-% nextCase(X, Y, _, _) :-
-%   isOnBoard(X, Y),
-%   X == 8,
-%   Y == 8,
-%   !,
-%   fail.
+% The caller must check if the returned cell is on the board.
 
 % Returns the first cell of the following row.
-nextCase(X, Y, NewX, NewY) :-
-  isOnBoard(X, Y),
-  X == 8,
+nextCase(8, Y, NewX, NewY) :-
   NewX is 1,
-  NewY is Y + 1.
+  NewY is Y + 1,
+  !.
 
 % Returns the next cell in the row.
 nextCase(X, Y, NewX, NewY) :-
-  isOnBoard(X, Y),
   NewX is X + 1,
   NewY is Y.
 
@@ -60,15 +51,17 @@ nextBoard(OldBoard, NewBoard, X, Y) :-
   getVal(NewBoard, X, Y, NewVal),
   var(NewVal),
   getVal(OldBoard, X, Y, OldVar),
-  getVal(NewBoard, X, Y, OldVar),
+  getVal(NewBoard, X, Y, OldVar), %set the cell (X, Y) in NewBoard to the value OldVar
   nextCase(X, Y, NewX, NewY),
-  nextBoard(OldBoard, NewBoard, NewX, NewY), !.
+  nextBoard(OldBoard, NewBoard, NewX, NewY),
+  !.
 
 % If the value of the cell (X, Y) of OldBoard is instantiated, go to the next cell.
 nextBoard(OldBoard, NewBoard, X, Y) :-
   isOnBoard(X,Y),
   nextCase(X, Y, NewX, NewY),
-  nextBoard(OldBoard, NewBoard, NewX, NewY), !.
+  nextBoard(OldBoard, NewBoard, NewX, NewY),
+  !.
 
 % End of the method nextBoard.
 nextBoard( _, _, _, _).
