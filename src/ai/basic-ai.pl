@@ -1,6 +1,6 @@
 :- module('basic_ai', []).
 :- use_module('../game/end-of-game', []).
-:- use_module('ai', [possibleMoves/3]).
+:- use_module('utils_ai', []).
 
 
 %testBoard(Board) :- 
@@ -40,7 +40,7 @@ getScoreBoard(Board,Score,LastX,LastY) :- utils:getVal(Board,LastX,LastY,Case), 
 %% else add the case value to the currant score
 getScoreBoard(Board,Score,LastX,LastY) :- utils:getVal(Board,LastX,LastY,Case), Y is LastY+1, getScoreBoard(Board, OldScore, LastX, Y), Score is OldScore+Case,!.
 
-bestMove(Board,X,Y,Player) :- possibleMoves(Board,Player,PossibleMoves), foundBestMove(Board,PossibleMoves,-99999,X,Y,Player), !.
+bestMove(Board,X,Y,Player) :- utils_ai:possibleMoves(Board,Player,PossibleMoves), foundBestMove(Board,PossibleMoves,-99999,X,Y,Player), !.
 
 %foundBestMove(+Board, +MoveList, +BestScore, BestX, BestY, +Player)
 foundBestMove(_,[],_,_,_,_) :- format(user_output, 'end', []), !.
@@ -69,11 +69,7 @@ foundBestMove(Board,[_|Tail], BestScore, BestX, BestY, Player) :-
     !.
     
 
-% getXYMove(+Move, -X, -Y)
-% return the X value and Y value of a Move, representing at the format [X, Y].
-getXYMove(Move, X, Y) :-
-    nth0(0, Move, X),
-    nth0(1, Move, Y).
+
     
     
     
