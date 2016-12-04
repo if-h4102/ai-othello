@@ -40,6 +40,6 @@ displayBoard(Board, Y, EndY) :-
 
 displayWinner(Player) :-
 	Player == -1,
-	writeln('The first player (who use the symbol x) wins.'), !.
+	writeln('The first player (who uses the symbol x) wins.'), !.
 displayWinner(_) :-
-	writeln('The second player (who use the symbol o) wins.').
+	writeln('The second player (who uses the symbol o) wins.').
