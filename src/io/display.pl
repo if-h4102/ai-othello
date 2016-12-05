@@ -1,5 +1,6 @@
 :- module('display', [displayBoard/1, displayWinner/1]).
 :- use_module('../game/utils', []).
+:- use_module('../game/end-of-game', []).
 
 displayCell(Val) :- var(Val), write('   |'), !.
 displayCell(-1) :- write(' x |').
@@ -15,7 +16,7 @@ displayRow(Board, Y, NewY):-
   displayRow(Board, 1, 9, Y),
   NewY is Y + 1,
   writeln(''),
-	writeln('  ---------------------------------').
+  writeln('  ---------------------------------').
 
 displayRow(_, X, EndX, _) :-
   X is EndX.
@@ -30,7 +31,9 @@ displayBoard(Board) :-
   displayBoard(Board, 1, 9).
 
 displayBoard(_, Y, EndY) :-
-  Y is EndY,
+  hY is EndY,
+  end_of_game:getTokenNumber(Board,1,ScoreO), end_of_game:getTokenNumber(Board,-1,ScoreX),
+  write(" number of tokens -  o : "), write(ScoreO), write(" | X : "), writeln(ScoreX),
   !.
 
 displayBoard(Board, Y, EndY) :-
