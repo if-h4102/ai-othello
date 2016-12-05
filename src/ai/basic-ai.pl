@@ -23,7 +23,7 @@
 bestMove(Board, X, Y, Player) :- utils_ai:possibleMoves(Board, Player, PossibleMoves), foundBestMove(Board, PossibleMoves, -99999, X, Y, Player), !.
 
 %foundBestMove(+Board, +MoveList, +BestScore, -BestX, -BestY, +Player)
-foundBestMove(_, [], _, _, _, _) :- format(user_output, 'end ai2~n', []), !.
+foundBestMove(_, [], _, _, _, _) :- format(user_output, '', []), !.
 
 foundBestMove(Board, [Move|Tail], BestScore, BestX, BestY, Player) :-
     utils_ai:getXYMove(Move, X, Y), 
