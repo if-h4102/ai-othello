@@ -1,7 +1,9 @@
 :- module('ai', []).
 :- use_module('random-ai', []).
 :- use_module('basic-ai', []).
-% :- use_module('min-max-ai', []).
+:- use_module('min_max_ai', []).
+
+:-use_module('../io/display.pl', []).
 
 %%%%% bestMove(+Board, +Player, +Ai, -X, -Y)
 % Returns the best move (X, Y) according to the given Ai
@@ -16,5 +18,18 @@ bestMove(Board, Player, 1, X, Y) :- random_ai:ai1(Board, Player, X, Y).
 bestMove(Board, Player, 2, X, Y) :- basic_ai:bestMove(Board, X, Y, Player).
 
 % Min-Max AI (Ai = 3)
-% bestMove(Board, Player, 3, X, Y) :- min_max_ai:bestMove(Board, X, Y, Player).
+bestMove(Board, Player, 3, X, Y) :- min_max_ai:bestMove(Board, X, Y, Player).
+
+test :-
+    Board = [[_, _, _, _, _, _, _, _, _, _],
+             [_, _, _, _, _, _, _, _, _, _],
+             [_, _, _, _, _, _, _, _, _, _],
+             [_, _, _, _, _, _, _, _, _, _],
+             [_, _, _, _,-1, 1, _, _, _, _],
+             [_, _, _, _, 1,-1, _, _, _, _],
+             [_, _, _, _, _, _, _, _, _, _],
+             [_, _, _, _, _, _, _, _, _, _],
+             [_, _, _, _, _, _, _, _, _, _],
+             [_, _, _, _, _, _, _, _, _, _]],
+    min_max_ai:bestMove(Board, X, Y, 1).
 
