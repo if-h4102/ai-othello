@@ -7,10 +7,10 @@
 gameloop() :-
 	writeln('What is the type of the first player which will use the symbol x ?'),
 	writeln('Type -1 for a human player or a number between 0 and 3 to select an ai with the given level.'),
-	readInt(Player1Type, -2, 4),
+	readIntBounded(Player1Type, -2, 4),
 	writeln('What is the type of the second player which will use the symbol o ?'),
 	writeln('Type -1 for a human player or a number between 0 and 3 to select an ai with the given level.'),
-	readInt(Player2Type, -2, 4),
+	readIntBounded(Player2Type, -2, 4),
 	main:board(Board),
 	display:displayBoard(Board),
 	determineFirstPlayer(FirstPlayer),
@@ -66,9 +66,9 @@ updateDisplayBoard(Board, Player, X, Y, Player1Type, Player2Type) :-
 humanPlay(Board, Player, X, Y) :-
 	printPlayerSymbol(Player),
 	writeln('At which abscissa do you want to play ?'),
-	readInt(Xtmp, 0, 9),
+	readIntBounded(Xtmp, 0, 9),
 	writeln('At which ordinate do you want to play ?'),
-	readInt(Ytmp, 0, 9),
+	readIntBounded(Ytmp, 0, 9),
 	checkGivenCoordinates(Board, Player, X, Y, Xtmp, Ytmp).
 
 %%%%% printPlayerSymbol(+Player)
@@ -94,12 +94,13 @@ readInt(X) :-
 readInt(X) :-
     repeat, write(' Please enter an integer '), read(X), integer(X), !.
 
-%%%%% readInt(-X, +Min, +Max)
+%%%%% readIntBounded(-X, +Min, +Max)
 % read a user input until it is an integer and is between Min and Max (exclusive).
-% When the method below is uncommented and fail, prolog will not call the second readInt/3 (WHY??).
-%readInt(X, Min, Max) :-
-%    writeln('readInt3'), readInt(X), writeln('AfterReadInt'), X < Max, writeln('afterMax'), X > Min, writeln('afterMin'), !.
-readInt(X, Min, Max) :-
+redaIntBounded(_, Min, Max) :-
+    Min > Max, !, fail.
+readIntBounded(X, Min, Max) :-
+    writeln('readInt3'), readInt(X), X < Max, X > Min, !.
+readIntBounded(X, Min, Max) :-
     repeat, 
     write('The value must be between '), write(Min), write(' and '), write(Max), writeln(' (exclusive)'),
     readInt(X),
