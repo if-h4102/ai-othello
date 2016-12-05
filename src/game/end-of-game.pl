@@ -26,13 +26,11 @@ getTokenNumber(Board, Player, Score, LastX, 9) :-
 % If the case is a token of player add one to the current score
 getTokenNumber(Board, Player, Score, LastX, LastY) :-
     utils:getVal(Board, LastX, LastY, Case),
-    write(LastX), write(" "), write (LastY), write(" case : "), write(Case), write(" player : "), writeln(Player),
+   % write(LastX), write(" "), write(LastY), write(" case : "), write(Case), write(" player : "), writeln(Player),
     Case == Player,
-    write("ppp"),
     Y is LastY + 1,
     getTokenNumber(Board, Player, OldScore, LastX, Y),
     Score is OldScore + 1,
-    write("sss"),
     !.
 % Else the case is a token of the other player, score don't change
 getTokenNumber(Board, Player, Score, LastX, LastY) :-

@@ -30,8 +30,8 @@ displayBoard(Board) :-
   writeln('  ---------------------------------'),
   displayBoard(Board, 1, 9).
 
-displayBoard(_, Y, EndY) :-
-  hY is EndY,
+displayBoard(Board, Y, EndY) :-
+  Y is EndY,
   end_of_game:getTokenNumber(Board,1,ScoreO), end_of_game:getTokenNumber(Board,-1,ScoreX),
   write(" number of tokens -  o : "), write(ScoreO), write(" | X : "), writeln(ScoreX),
   !.
