@@ -87,7 +87,7 @@ testCorner(bestMove) :-
              [ _, _, _, _, _, _, _, _, _, _],
              [ _, _, _, _, _, _, _, _, _, _]],
     ai:bestMove(Board, 1, 2, X, Y),
-    X==5,
+    X==1,
     Y==8.
 
 :- end_tests(basic_ai).
