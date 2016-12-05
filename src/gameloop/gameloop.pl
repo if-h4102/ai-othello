@@ -99,7 +99,7 @@ readInt(X) :-
 redaIntBounded(_, Min, Max) :-
     Min > Max, !, fail.
 readIntBounded(X, Min, Max) :-
-    writeln('readInt3'), readInt(X), X < Max, X > Min, !.
+    readInt(X), X < Max, X > Min, !.
 readIntBounded(X, Min, Max) :-
     repeat, 
     write('The value must be between '), write(Min), write(' and '), write(Max), writeln(' (exclusive)'),
