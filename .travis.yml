@@ -8,7 +8,7 @@ before_script:
   - sudo apt-get install swi-prolog-nox
 
 script:
-    - swipl test/main.pl
-    
+  - swipl test/main.pl
+
 notifications:
   slack: ifhexas1:zs56o8LumGUDJMX1iWdQJwRO
