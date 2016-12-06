@@ -33,7 +33,7 @@ findBestMove(Board, [Move|Tail], BestScore, BestX, BestY, AiPlayer) :-
     utils_ai:getXYMove(Move, X, Y), 
     utils:updateBoard(Board, AiPlayer, X, Y, NewBoard),
     HumanPlayer is -AiPlayer, 
-    getScoreMinMax(NewBoard, HumanPlayer, 1, PlayerIndependantScore),
+    getScoreMinMax(NewBoard, HumanPlayer, 3, PlayerIndependantScore),
     Score is PlayerIndependantScore * AiPlayer, 
     Score > BestScore, 
     findBestMove(Board, Tail, Score, NewBestX, NewBestY, AiPlayer), 
@@ -65,10 +65,11 @@ getScoreMinMax(Board, Player, 0, PlayerIndependantScore) :-
 getScoreMinMax(Board, CurrentPlayer, Depth, PlayerIndependantScore) :-
     utils_ai:possibleMoves(Board, CurrentPlayer, MoveList),
     findBestScore(Board, MoveList, CurrentPlayer, Depth, -999999, FoundScore),
-    PlayerIndependantScore is FoundScore * CurrentPlayer,
+    minMaxSetIndependantScore(CurrentPlayer, FoundScore, PlayerIndependantScore),
     !.
-    
 
+minMaxSetIndependantScore(Player, DependantScore, IndependantScore) :-
+    IndependantScore is DependantScore * Player.
 
 
 %findBestScore(+Board, +MoveList, +CurrentPlayer, +Depth, +CurrentBestScore, -FoundBestScore)
