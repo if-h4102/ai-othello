@@ -23,38 +23,52 @@ testBoard(Board) :-
 % bestMove(+Board, -X, -Y, +CurrentPlayer
 bestMove(Board, X, Y, CurrentPlayer) :- 
     utils_ai:possibleMoves(Board, CurrentPlayer, MoveList), 
-    findBestMove(Board, MoveList, -99999, X, Y, CurrentPlayer), 
+    findBestMove(Board, MoveList, -9999999, X, Y, CurrentPlayer),
     !.
 
 %findBestMove(+Board, +MoveList, +BestScore, -BestX, -BestY, +AiPlayer)
-findBestMove(_, [], _, _, _, _) :- !.
+findBestMove(_, [], BestScore, _, _, AiPlayer) :- 
+    !.
 
 findBestMove(Board, [Move|Tail], BestScore, BestX, BestY, AiPlayer) :-
     utils_ai:getXYMove(Move, X, Y), 
     utils:updateBoard(Board, AiPlayer, X, Y, NewBoard),
     HumanPlayer is -AiPlayer, 
-    getScoreMinMax(NewBoard, HumanPlayer, 3, PlayerIndependantScore),
+    getScoreMinMax(NewBoard, HumanPlayer, 2, PlayerIndependantScore),
     Score is PlayerIndependantScore * AiPlayer, 
     Score > BestScore, 
-    findBestMove(Board, Tail, Score, NewBestX, NewBestY, AiPlayer), 
-    ( % if a better score is found set return var with it else use the current one
-        ( 
-            var(NewBestX), 
-            var(NewBestY), 
-            BestX is X, 
-            BestY is Y
-        )
-        ;
-        ( 
-            BestX is NewBestX,
-            BestY is NewBestY
-        )
-    ), 
+    findBestMove(Board, Tail, Score, BestX, BestY, AiPlayer), 
+%    ( % if a better score is found set return var with it else use the current one
+%        ( 
+%            var(NewBestX), 
+%            var(NewBestY), 
+%            BestX is X, 
+%            BestY is Y,
+%            write("update best move : "), write(X), write(";"), writeln(Y),
+%        )
+%        ;
+%        ( 
+%            BestX is NewBestX,
+%            BestY is NewBestY
+%        )
+%    ),
+    updateBestMove(BestX,BestY,X,Y),
     !.
-
+   
 findBestMove(Board, [_|Tail], BestScore, BestX, BestY, Player) :- 
     findBestMove(Board, Tail, BestScore, BestX, BestY, Player), 
     !.
+
+    
+updateBestMove(OldX,OldY,NewX,NewY) :-
+    var(OldX),
+    var(OldY),
+    OldX is NewX,
+    OldY is NewY,
+    !. 
+    
+updateBestMove(_,_,_,_).
+    
     
     
 getScoreMinMax(Board, Player, 0, PlayerIndependantScore) :-
@@ -73,6 +87,10 @@ minMaxSetIndependantScore(Player, DependantScore, IndependantScore) :-
 
 
 %findBestScore(+Board, +MoveList, +CurrentPlayer, +Depth, +CurrentBestScore, -FoundBestScore)
+findBestScore(_, [], CurrentPlayer, _, -999999, FoundBestScore) :- 
+    FoundBestScore is CurrentPlayer * 999999 ,
+    !.
+    
 findBestScore(_, [], _, _, CurrentBestScore, FoundBestScore) :- 
     FoundBestScore is CurrentBestScore,
     !.
