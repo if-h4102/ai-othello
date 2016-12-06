@@ -1,4 +1,4 @@
-:- module('test_end_of_game', [test_score/0]).
+:- module('test_end_of_game', []).
 :- use_module(library(plunit)).
 :- use_module('../src/game/end-of-game', []).
 
