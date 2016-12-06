@@ -1,4 +1,4 @@
-:- module('gameloop_auto', [gameloop_auto/1]).
+:- module('gameloop_auto', []).
 :- use_module('../main', []).
 :- use_module('../io/display', []).
 :- use_module('../game/end-of-game', []).
@@ -32,13 +32,20 @@ updateBoard(Board, Player, X, Y, Player1Type, Player2Type) :-
 playAuto(Board, Player, _, _) :-
 	'end_of_game':gameOver(Board, Player),
 	'end_of_game':winner(Board, Winner),
-	Winner==1,
-	writeln('Player 1 wins '),
+	Winner == 1,
+	writeln('1'),
 	!.
 playAuto(Board, Player, _, _) :-
 	'end_of_game':gameOver(Board, Player),
 	'end_of_game':winner(Board, Winner),
-	writeln('Player -1 wins '),
+	Winner == -1,
+	% Player -1 won, output as "2"
+	writeln('2'),
+	!.
+playAuto(Board, Player, _, _) :-
+	'end_of_game':gameOver(Board, Player),
+	% Draw, output as "0"
+	writeln('0'),
 	!.
 playAuto(Board, Player, Player1Type, Player2Type) :-
 	'end_of_game':playerCanPlay(Board, Player),
