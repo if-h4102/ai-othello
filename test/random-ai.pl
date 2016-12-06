@@ -1,4 +1,4 @@
-:- module('test_random_ai', []).
+:- module('test_random_ai', [test_random_ai/0]).
 :- use_module(library(plunit)).
 :- use_module('../src/ai/random-ai', []).
 

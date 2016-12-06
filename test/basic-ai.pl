@@ -1,4 +1,4 @@
-:- module('test_basic_ai', []).
+:- module('test_basic_ai', [test_basic_ai/0]).
 :- use_module(library(plunit)).
 :- use_module('../src/ai/ai', []).
 :- use_module('../src/ai/basic-ai', []).
@@ -8,7 +8,7 @@ test_basic_ai :-
 	run_tests([basic_ai]).
 
 % Define the test case
-:- begin_tests(basic_ai).  
+:- begin_tests(basic_ai).
 
 test(bestMove) :-
     Board = [[ _, _, _, _, _, _, _, _, _, _],
@@ -23,7 +23,8 @@ test(bestMove) :-
              [ _, _, _, _, _, _, _, _, _, _]],
     ai:bestMove(Board, 1, 2, X, Y),
     X == 4,
-    Y == 6.
+    Y == 6,
+    !.
 
 % test where ia must not choose the highest amount of case to swap (case before corner).
 testNotCorner(bestMove) :-

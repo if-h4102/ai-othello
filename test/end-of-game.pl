@@ -1,4 +1,4 @@
-:- module('test_end_of_game', []).
+:- module('test_end_of_game', [test_end_of_game/0]).
 :- use_module(library(plunit)).
 :- use_module('../src/game/end-of-game', []).
 
@@ -21,7 +21,7 @@ test(game_over) :-
            [ _, _, _, _, _, _, _, _, _, _],
            [ _, _, _, _, _, _, _, _, _, _]],
 	end_of_game:gameOver(Board, -1).
-  
+
 test(winner) :-
   Board = [[ _, _, _, _, _, _, _, _, _, _],
            [ _, _, _, _, _, _, _, _, _, _],
@@ -33,8 +33,9 @@ test(winner) :-
            [ _, _, _, _, _, _, _, _, _, _],
            [ _, _, _, _, _, _, _, _, _, _],
            [ _, _, _, _, _, _, _, _, _, _]],
-  end_of_game:winner(Board, 1).
-  
+  end_of_game:winner(Board, 1),
+  !.
+
 test(player_can_play) :-
   Board = [[ _, _, _, _, _, _, _, _, _, _],
            [ _, _, _, _, _, _, _, _, _, _],
@@ -46,8 +47,9 @@ test(player_can_play) :-
            [ _, _, _, _, _, _, _, _, _, _],
            [ _, _, _, _, _, _, _, _, _, _],
            [ _, _, _, _, _, _, _, _, _, _]],
-  end_of_game:playerCanPlay(Board, -1).
-  
+  end_of_game:playerCanPlay(Board, -1),
+  !.
+
 test(can_be_played_fail1) :-
   Board = [[ _, _, _, _, _, _, _, _, _, _],
            [ _, _, _, _, _, _, _, _, _, _],
@@ -59,8 +61,9 @@ test(can_be_played_fail1) :-
            [ _, _, _, _, _, _, _, _, _, _],
            [ _, _, _, _, _, _, _, _, _, _],
            [ _, _, _, _, _, _, _, _, _, _]],
-  end_of_game:canBePlayed(Board, 4, 6, 1).
-  
+  end_of_game:canBePlayed(Board, 4, 6, 1),
+  !.
+
 test(can_be_played_fail2, [fail]) :-
   end_of_game:canBePlayed(_, 1, 0, 1).
 

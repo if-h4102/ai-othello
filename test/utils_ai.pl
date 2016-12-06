@@ -1,4 +1,4 @@
-:- module('test_utils_ai', []).
+:- module('test_utils_ai', [test_utils_ai/0]).
 :- use_module(library(plunit)).
 :- use_module('../src/ai/utils_ai', []).
 
