@@ -12,6 +12,7 @@ isGameNotFinished(Board, Player) :- Player2 is -Player, playerCanPlay(Board, Pla
 gameOver(Board, Player) :- isGameNotFinished(Board, Player), !, fail.
 gameOver(_, _) :- true.
 
+%%%%% getTokenNumber(+Board, +Player, -Score).
 % Count the number of token of a given player
 getTokenNumber(Board,Player,Score) :-
     getTokenNumber(Board, Player, Score, 1, 1).
@@ -37,7 +38,7 @@ getTokenNumber(Board, Player, Score, LastX, LastY) :-
     Y is LastY + 1,
     getTokenNumber(Board, Player, Score, LastX, Y),
     !.
-    
+
 
 % Get the current score
 % NOTE: there must be only one way to prove the score
