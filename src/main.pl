@@ -19,10 +19,10 @@
     [_, _, _, _, _, _, _, _, _, _]
 ])).
 
-run :- 
-  writeln('Running...'),
-  board(Board),
-	display:displayBoard(Board),
-	writeln('End!').
+% run :-
+%     writeln('Running...'),
+%     board(Board),
+%     display:displayBoard(Board),
+%     writeln('End!').
 
-:- run.
+% :- run.

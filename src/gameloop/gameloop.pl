@@ -1,3 +1,4 @@
+:- module('gameloop', []).
 :- use_module('../main', []).
 :- use_module('../io/display', []).
 :- use_module('../game/end-of-game', []).

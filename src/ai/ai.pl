@@ -20,16 +20,3 @@ bestMove(Board, Player, 2, X, Y) :- basic_ai:bestMove(Board, X, Y, Player).
 % Min-Max AI (Ai = 3)
 bestMove(Board, Player, 3, X, Y) :- min_max_ai:bestMove(Board, X, Y, Player).
 
-test :-
-    Board = [[_, _, _, _, _, _, _, _, _, _],
-             [_, _, _, _, _, _, _, _, _, _],
-             [_, _, _, _, _, _, _, _, _, _],
-             [_, _, _, _, _, _, _, _, _, _],
-             [_, _, _, _,-1, 1, _, _, _, _],
-             [_, _, _, _, 1,-1, _, _, _, _],
-             [_, _, _, _, _, _, _, _, _, _],
-             [_, _, _, _, _, _, _, _, _, _],
-             [_, _, _, _, _, _, _, _, _, _],
-             [_, _, _, _, _, _, _, _, _, _]],
-    min_max_ai:bestMove(Board, X, Y, 1).
-
