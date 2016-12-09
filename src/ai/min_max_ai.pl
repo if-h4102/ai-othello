@@ -27,7 +27,7 @@ bestMove(Board, X, Y, CurrentPlayer) :-
     !.
 
 %findBestMove(+Board, +MoveList, +BestScore, -BestX, -BestY, +AiPlayer)
-findBestMove(_, [], BestScore, _, _, AiPlayer) :- 
+findBestMove(_, [], _, _, _, _) :- 
     !.
 
 findBestMove(Board, [Move|Tail], BestScore, BestX, BestY, AiPlayer) :-
