@@ -1,5 +1,6 @@
 :- module('main', []).
 :- use_module('io/display', []).
+:- use_module('gameloop/gameloop', []).
 
 % Define the predicate which will unify with the current state of the board game.
 :- dynamic board/1.		% "dynamic" means that predicate's definition may change during run time
@@ -19,10 +20,11 @@
     [_, _, _, _, _, _, _, _, _, _]
 ])).
 
-% run :-
+ run :-
+    gameloop:gameloop.
 %     writeln('Running...'),
 %     board(Board),
 %     display:displayBoard(Board),
 %     writeln('End!').
 
-% :- run.
+ :- run.
