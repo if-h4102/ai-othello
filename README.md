@@ -26,10 +26,13 @@ You'll find how to play the game in the following section.
 
 ### 1. Play using the console
   
-    > swipl src/gameloop/gameloop.pl
-    1 ?- gameloop:gameloop.
+    > swipl src/main.pl
     
 Then follow instructions to setup players (-1 for human player, [0, .., 3] for AI) and play.
+
+Once the gave finished you can start an other one by calling on the prolog interpreter:
+
+    > ?- main:run.
 
 **Example:** (Human versus _min-max_ AI)
 
@@ -171,7 +174,7 @@ To run all the tests, just run
 
     > swipl src/main.pl
     
-From here you can access everything.
+From here you can access everything. (you will first have to play a game)
     
 ## Requierements - SWIprolog
 
